@@ -735,6 +735,8 @@
             });
         });
 
+
+        
         // Cancel appointment
         document.querySelectorAll('.text-red-600').forEach(button => {
             button.addEventListener('click', () => {
