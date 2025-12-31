@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tableau de Bord Médecin - Gestion des Patients</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .modal {
             transition: opacity 0.25s ease;
@@ -32,7 +30,6 @@
                         <span class="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-400"></span>
                     </div>
                     <div class="flex items-center">
-                        <img class="h-8 w-8 rounded-full" src="https://picsum.photos/seed/doctor123/40/40.jpg" alt="Avatar">
                         <span class="ml-2 text-sm font-medium text-gray-700">Dr. Martin</span>
                     </div>
                 </div>
@@ -224,7 +221,6 @@
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <div class="flex items-center">
                                                     <div class="flex-shrink-0 h-10 w-10">
-                                                        <img class="h-10 w-10 rounded-full" src="https://picsum.photos/seed/patient1/40/40.jpg" alt="">
                                                     </div>
                                                     <div class="ml-4">
                                                         <div class="text-sm font-medium text-gray-900">Jean Dupont</div>
@@ -245,7 +241,6 @@
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <div class="flex items-center">
                                                     <div class="flex-shrink-0 h-10 w-10">
-                                                        <img class="h-10 w-10 rounded-full" src="https://picsum.photos/seed/patient2/40/40.jpg" alt="">
                                                     </div>
                                                     <div class="ml-4">
                                                         <div class="text-sm font-medium text-gray-900">Marie Martin</div>
@@ -266,7 +261,6 @@
                                             <td class="px-6 py-4 whitespace-nowrap">
                                                 <div class="flex items-center">
                                                     <div class="flex-shrink-0 h-10 w-10">
-                                                        <img class="h-10 w-10 rounded-full" src="https://picsum.photos/seed/patient3/40/40.jpg" alt="">
                                                     </div>
                                                     <div class="ml-4">
                                                         <div class="text-sm font-medium text-gray-900">Pierre Bernard</div>
@@ -301,7 +295,6 @@
                                     <div class="flex justify-between">
                                         <div class="flex items-center">
                                             <div class="flex-shrink-0 h-10 w-10">
-                                                <img class="h-10 w-10 rounded-full" src="https://picsum.photos/seed/patient1/40/40.jpg" alt="">
                                             </div>
                                             <div class="ml-4">
                                                 <div class="text-sm font-medium text-gray-900">Jean Dupont</div>
@@ -327,7 +320,6 @@
                                     <div class="flex justify-between">
                                         <div class="flex items-center">
                                             <div class="flex-shrink-0 h-10 w-10">
-                                                <img class="h-10 w-10 rounded-full" src="https://picsum.photos/seed/patient2/40/40.jpg" alt="">
                                             </div>
                                             <div class="ml-4">
                                                 <div class="text-sm font-medium text-gray-900">Marie Martin</div>
@@ -353,7 +345,6 @@
                                     <div class="flex justify-between">
                                         <div class="flex items-center">
                                             <div class="flex-shrink-0 h-10 w-10">
-                                                <img class="h-10 w-10 rounded-full" src="https://picsum.photos/seed/patient3/40/40.jpg" alt="">
                                             </div>
                                             <div class="ml-4">
                                                 <div class="text-sm font-medium text-gray-900">Pierre Bernard</div>
@@ -643,32 +634,26 @@
     </div>
 
     <script>
-        // Tab functionality
         document.querySelectorAll('.tab-btn').forEach(button => {
             button.addEventListener('click', () => {
                 const tabName = button.getAttribute('data-tab');
                 
-                // Hide all tab contents
                 document.querySelectorAll('.tab-content').forEach(content => {
                     content.classList.add('hidden');
                 });
                 
-                // Remove active state from all buttons
                 document.querySelectorAll('.tab-btn').forEach(btn => {
                     btn.classList.remove('text-blue-600', 'border-b-2', 'border-blue-500');
                     btn.classList.add('text-gray-500');
                 });
                 
-                // Show selected tab content
                 document.getElementById(`${tabName}-tab`).classList.remove('hidden');
                 
-                // Add active state to clicked button
                 button.classList.remove('text-gray-500');
                 button.classList.add('text-blue-600', 'border-b-2', 'border-blue-500');
             });
         });
 
-        // Modal functionality
         function setupModal(modalId, openBtnId, closeBtnId, cancelBtnId) {
             const modal = document.getElementById(modalId);
             const openBtn = document.getElementById(openBtnId);
@@ -693,7 +678,6 @@
                 });
             }
             
-            // Close modal when clicking outside
             modal.addEventListener('click', (e) => {
                 if (e.target === modal) {
                     modal.classList.add('hidden');
@@ -701,12 +685,10 @@
             });
         }
 
-        // Setup modals
         setupModal('add-patient-modal', 'add-patient-btn', 'close-patient-modal', 'cancel-patient-modal');
         setupModal('add-appointment-modal', 'add-appointment-btn', 'close-appointment-modal', 'cancel-appointment-modal');
         setupModal('add-prescription-modal', 'add-prescription-btn', 'close-prescription-modal', 'cancel-prescription-modal');
 
-        // Success notification
         function showNotification(message) {
             const notification = document.getElementById('success-notification');
             const messageElement = document.getElementById('notification-message');
@@ -719,14 +701,12 @@
             }, 3000);
         }
 
-        // Simulate form submissions
         document.querySelectorAll('button[type="button"]:not(#cancel-patient-modal):not(#cancel-appointment-modal):not(#cancel-prescription-modal):not(.tab-btn):not(.text-red-600):not(.text-blue-600):not(.text-green-600):not(.text-purple-600):not(.text-gray-600)').forEach(button => {
             button.addEventListener('click', () => {
                 const buttonText = button.textContent.trim();
                 if (buttonText === 'Enregistrer' || buttonText === 'Créer') {
                     showNotification('Opération réussie!');
                     
-                    // Close the modal
                     const modal = button.closest('.modal');
                     if (modal) {
                         modal.classList.add('hidden');
@@ -736,13 +716,11 @@
         });
 
 
-        
-        // Cancel appointment
+
         document.querySelectorAll('.text-red-600').forEach(button => {
             button.addEventListener('click', () => {
                 if (confirm('Êtes-vous sûr de vouloir annuler ce rendez-vous?')) {
                     showNotification('Rendez-vous annulé!');
-                    // In a real app, this would remove the appointment from the list
                     button.closest('.bg-white').remove();
                 }
             });

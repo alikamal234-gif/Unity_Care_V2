@@ -10,8 +10,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Espace Patient - Cabinet Médical</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -57,7 +55,6 @@
     </style>
 </head>
 <body class="bg-gray-900 text-gray-100 dark">
-    <!-- Header -->
     <header class="glass-effect border-b border-gray-700 sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
@@ -70,7 +67,6 @@
                         <i class="fas fa-bell h-5 w-5"></i>
                     </button>
                     <div class="flex items-center space-x-3">
-                        <img class="h-8 w-8 rounded-full ring-2 ring-blue-500" src="https://picsum.photos/seed/patient123/40/40.jpg" alt="Avatar">
                         <div class="hidden sm:block">
                             <p class="text-sm font-medium text-gray-100">Jean Dupont</p>
                             <p class="text-xs text-gray-400">#PAT001</p>
@@ -84,9 +80,7 @@
         </div>
     </header>
 
-    <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <!-- Welcome Section -->
         <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl shadow-2xl p-6 mb-8 text-white glow-effect">
             <div class="flex items-center justify-between">
                 <div>
@@ -99,7 +93,6 @@
             </div>
         </div>
 
-        <!-- Quick Actions -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
             <button id="quick-appointment-btn" class="bg-gray-800 p-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-center group hover:scale-105 border border-gray-700">
                 <div class="bg-blue-900 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:bg-blue-800 transition-colors">
@@ -126,7 +119,6 @@
             </button>
         </div>
 
-        <!-- Tabs Section -->
         <div class="bg-gray-800 shadow-xl rounded-xl overflow-hidden border border-gray-700">
             <div class="border-b border-gray-700">
                 <nav class="flex -mb-px">
@@ -137,7 +129,6 @@
                 </nav>
             </div>
 
-            <!-- Appointments Tab -->
             <div id="appointments-tab" class="tab-content p-6">
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="text-lg font-medium text-gray-100">Rendez-vous à venir</h3>
@@ -146,7 +137,6 @@
                     </button>
                 </div>
 
-                <!-- Filter Tabs -->
                 <div class="flex space-x-4 mb-6 border-b border-gray-700">
                     <button class="pb-3 px-1 text-sm font-medium text-blue-400 border-b-2 border-blue-500">À venir</button>
                     <button class="pb-3 px-1 text-sm font-medium text-gray-400 hover:text-gray-200">Passés</button>
@@ -154,7 +144,6 @@
                 </div>
 
                 <div class="space-y-4">
-                    <!-- Today's Appointment -->
                     <div class="border-l-4 border-blue-500 bg-blue-900/30 p-4 rounded-r-lg fade-in">
                         <div class="flex justify-between items-start">
                             <div class="flex-1">
@@ -180,7 +169,6 @@
                         </div>
                     </div>
 
-                    <!-- Future Appointments -->
                     <div class="bg-gray-700/50 border border-gray-600 p-4 rounded-lg hover:bg-gray-700 transition-all duration-200 fade-in">
                         <div class="flex justify-between items-start">
                             <div class="flex-1">
@@ -232,7 +220,6 @@
                     </div>
                 </div>
 
-                <!-- No Appointments Message -->
                 <div class="text-center py-12 hidden" id="no-appointments">
                     <i class="fas fa-calendar-times text-gray-600 text-5xl mb-4"></i>
                     <p class="text-gray-400">Vous n'avez aucun rendez-vous à venir</p>
@@ -245,7 +232,6 @@
             
     </main>
 
-    <!-- Modal for Adding Appointment -->
     <div id="add-appointment-modal" class="modal fixed inset-0 bg-gray-900/80 overflow-y-auto h-full w-full hidden z-50">
         <div class="relative top-20 mx-auto p-5 border border-gray-600 w-full max-w-md shadow-2xl rounded-xl bg-gray-800 modal-backdrop">
             <div class="mt-3">
@@ -303,7 +289,6 @@
         </div>
     </div>
 
-    <!-- Success Notification -->
     <div id="success-notification" class="fixed bottom-4 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-2xl transform translate-y-full transition-transform duration-300 ease-in-out z-50 border border-green-500">
         <div class="flex items-center">
             <i class="fas fa-check-circle mr-2"></i>
@@ -311,7 +296,6 @@
         </div>
     </div>
 
-    <!-- Confirmation Modal -->
     <div id="confirm-modal" class="modal fixed inset-0 bg-gray-900/80 overflow-y-auto h-full w-full hidden z-50">
         <div class="relative top-20 mx-auto p-5 border border-gray-600 w-96 shadow-2xl rounded-xl bg-gray-800 modal-backdrop">
             <div class="mt-3 text-center">
@@ -335,14 +319,11 @@
     <script>
         
 
-        // Modal functionality
         const appointmentModal = document.getElementById('add-appointment-modal');
         const confirmModal = document.getElementById('confirm-modal');
         
-        // Open appointment modal
         document.getElementById('add-appointment-btn').addEventListener('click', () => {
             appointmentModal.classList.remove('hidden');
-            // Set minimum date to today
             const today = new Date().toISOString().split('T')[0];
             document.querySelector('input[type="date"]').min = today;
         });
@@ -353,7 +334,6 @@
             document.querySelector('input[type="date"]').min = today;
         });
         
-        // Close appointment modal
         document.getElementById('close-appointment-modal').addEventListener('click', () => {
             appointmentModal.classList.add('hidden');
         });
@@ -362,7 +342,6 @@
             appointmentModal.classList.add('hidden');
         });
         
-        // Time slot selection
         document.querySelectorAll('.time-slot').forEach(slot => {
             slot.addEventListener('click', () => {
                 document.querySelectorAll('.time-slot').forEach(s => {
@@ -374,13 +353,11 @@
             });
         });
         
-        // Confirm appointment
         document.getElementById('confirm-appointment').addEventListener('click', () => {
             appointmentModal.classList.add('hidden');
             showNotification('Rendez-vous confirmé avec succès!');
         });
         
-        // Cancel appointment functionality
         let appointmentToCancel = null;
         
         document.querySelectorAll('.cancel-appointment').forEach(button => {
@@ -408,7 +385,6 @@
             appointmentToCancel = null;
         });
         
-        // Close modals when clicking outside
         appointmentModal.addEventListener('click', (e) => {
             if (e.target === appointmentModal) {
                 appointmentModal.classList.add('hidden');
@@ -421,7 +397,6 @@
             }
         });
         
-        // Success notification
         function showNotification(message) {
             const notification = document.getElementById('success-notification');
             const messageElement = document.getElementById('notification-message');
@@ -434,7 +409,6 @@
             }, 3000);
         }
         
-        // Prescription actions
         document.querySelectorAll('.fa-download').forEach(button => {
             button.parentElement.addEventListener('click', () => {
                 showNotification('Téléchargement du PDF en cours...');
