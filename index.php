@@ -1,3 +1,33 @@
+<?php
+
+require_once "classes/repositories/AdminRepository.php";
+require_once "classes/repositories/DepartmentRepository.php";
+require_once "classes/repositories/PatientRepository.php";
+require_once "classes/repositories/DoctorRepository.php";
+$pat = new AdminRepository();
+$dep = new DepartmentRepository();
+$delete_patient = new PatientRepository();
+$delete_doctor = new DoctorRepository();
+$row_patient = $pat->getAll('patients','patient');
+$row_doctors = $pat->getAll('doctors','doctor');
+$row_rendezVous = $pat->getRendezVous();
+$row_departments = $dep->getAll();
+
+
+
+if(isset($_GET['id']) && $_GET['action'] == "delete" && $_GET['table'] == 'patients'){
+    $delete_patient->deletePatient((int) $_GET['id'],);
+    header('Location: index.php');
+    exit;
+}else if (isset($_GET['id']) && $_GET['action'] == "delete" && $_GET['table'] == 'doctors'){
+    $delete_doctor->deleteDoctor((int) $_GET['id']);
+    header('Location: index.php');
+    exit;
+}
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -22,6 +52,24 @@
         .chart-container {
             position: relative;
         }
+
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: #3b82f6;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #3b82f6 transparent;
+}
+
     </style>
 </head>
 
@@ -144,35 +192,37 @@
                     <button onclick="openModal('patient')" class="text-blue-400 hover:text-blue-300"><i
                             class="fas fa-plus-circle"></i></button>
                 </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-sm">
+                <div class="overflow-y-auto max-h-64 custom-scroll">
+
+                    <table class="w-full text-sm ">
                         <thead>
                             <tr class="text-left text-gray-400 border-b border-gray-700">
-                                <th class="pb-3 font-medium">Nom</th>
-                                <th class="pb-3 font-medium">Date</th>
+                                <th class="pb-3 font-medium">Name</th>
+                                <th class="pb-3 font-medium">Phone</th>
+                                <th class="pb-3 font-medium">Created At</th>
+                                <th class="pb-3 font-medium">Date of birthday</th>
+                                <th class="pb-3 font-medium">Address</th>
                                 <th class="pb-3 font-medium">Gender</th>
                             </tr>
                         </thead>
-                        <tbody class="text-gray-300">
+                        <tbody class="text-gray-300 ">
+                            <?php  foreach($row_patient as $key): ?>
                             <tr class="border-b border-gray-800 hover:bg-gray-800 hover:bg-opacity-50">
-                                <td class="py-3">Jean Dupont</td>
-                                <td class="py-3">15/02/1985</td>
+                                <td class="py-3"><?php echo $key['first_name'] . ' ' . $key['last_name'] ?></td>
+                                <td class="py-3"><?php echo $key['phone'] ?></td>
+                                <td class="py-3"><?php echo $key['creat_at'] ?></td>
+                                <td class="py-3"><?php echo $key['date_of_birth'] ?></td>
+                                <td class="py-3"><?php echo $key['adress'] ?></td>
                                 <td class="py-3"><span
-                                        class="px-2 py-1 text-xs rounded-full bg-green-900 text-green-300">Male</span>
+                                        class="px-2 py-1 text-xs rounded-full <?php if($key['gender'] == 'female'){ echo 'bg-yellow-900 text-yellow-300'; }else{ echo 'bg-green-900 text-green-300';};   ?> "><?php echo $key['gender'] ?></span>
 
                                 </td>
                                  <td class="py-3 flex gap-5"><a href="#"><i class="fas fa-edit"></i>
-                                    </a><a href="#"><i class="fas fa-trash-can"></i></a></td>
+                                    </a><a href="index.php?action=delete&table=patients&id=<?php  echo $key['id'] ?>"><i class="fas fa-trash-can"></i></a></td>
                             </tr>
-                            <tr class="border-b border-gray-800 hover:bg-gray-800 hover:bg-opacity-50">
-                                <td class="py-3">Marie Curie</td>
-                                <td class="py-3">22/09/1990</td>
-                                <td class="py-3"><span
-                                        class="px-2 py-1 text-xs rounded-full bg-yellow-900 text-yellow-300">Female</span>
-                                </td>
-                                 <td class="py-3 flex gap-5"><a href="#"><i class="fas fa-edit"></i>
-                                    </a><a href="#"><i class="fas fa-trash-can"></i></a></td>
-                            </tr>
+
+                            <?php  endforeach; ?>
+                            
                         </tbody>
                     </table>
                 </div>
@@ -184,19 +234,27 @@
                     <h3 class="text-lg font-semibold text-white">Prochains Rendez-vous</h3>
                     <button class="text-blue-400 hover:text-blue-300"><i class="fas fa-calendar-alt"></i></button>
                 </div>
-                <div class="overflow-x-auto">
+                <div class="overflow-y-auto max-h-64">
                     <table class="w-full text-sm">
                         <thead>
                             <tr class="text-left text-gray-400 border-b border-gray-700">
-                                <th class="pb-3 font-medium">Patient</th>
-                                <th class="pb-3 font-medium">Heure</th>
-                                <th class="pb-3 font-medium">Actions</th>
+                                <th class="pb-3 font-medium">Patients</th>
+                                <th class="pb-3 font-medium">doctors</th>
+                                <th class="pb-3 font-medium">Reason</th>
+                                <th class="pb-3 font-medium">Time</th>
+                                <th class="pb-3 font-medium">Date</th>
+                                <th class="pb-3 font-medium">Status</th>
                             </tr>
                         </thead>
                         <tbody class="text-gray-300">
+                            <?php  foreach($row_rendezVous AS $value):   ?>
                             <tr class="border-b border-gray-800 hover:bg-gray-800 hover:bg-opacity-50">
-                                <td class="py-3">Jean Dupont</td>
-                                <td class="py-3">10:00</td>
+                                <td class="py-3"><?php echo $value['patient_first_name'] . ' ' . $value['patient_last_name']  ?></td>
+                                <td class="py-3"><?php echo $value['doctor_first_name'] . ' ' . $value['doctor_last_name']  ?></td>
+                                <td class="py-3"><?php echo $value['reason']   ?></td>
+                                <td class="py-3"><?php echo $value['time']   ?></td>
+                                <td class="py-3"><?php echo $value['date']   ?></td>
+                                <td class="py-3"><?php echo $value['status']   ?></td>
                                 <td class="py-3">
                                     <button class="text-green-400 hover:text-green-300 mr-2" title="Accepter"><i
                                             class="fas fa-check"></i></button>
@@ -204,16 +262,8 @@
                                             class="fas fa-times"></i></button>
                                 </td>
                             </tr>
-                            <tr class="border-b border-gray-800 hover:bg-gray-800 hover:bg-opacity-50">
-                                <td class="py-3">Marie Curie</td>
-                                <td class="py-3">14:30</td>
-                                <td class="py-3">
-                                    <button class="text-green-400 hover:text-green-300 mr-2" title="Accepter"><i
-                                            class="fas fa-check"></i></button>
-                                    <button class="text-red-400 hover:text-red-300" title="Refuser"><i
-                                            class="fas fa-times"></i></button>
-                                </td>
-                            </tr>
+                            <?php  endforeach; ?>
+                            
                         </tbody>
                     </table>
                 </div>
@@ -227,34 +277,34 @@
                     <button onclick="openModal('doctor')" class="text-blue-400 hover:text-blue-300"><i
                             class="fas fa-plus-circle"></i></button>
                 </div>
-                <div class="overflow-x-auto">
+                <div class="overflow-y-auto max-h-64">
                     <table class="w-full text-sm">
                         <thead>
                             <tr class="text-left text-gray-400 border-b border-gray-700">
-                                <th class="pb-3 font-medium">Nom</th>
-                                <th class="pb-3 font-medium">Date</th>
-                                <th class="pb-3 font-medium">Specialization</th>
+                                <th class="pb-3 font-medium">Name</th>
+                                <th class="pb-3 font-medium">Phone</th>
+                                <th class="pb-3 font-medium">Created At</th>
+                                <th class="pb-3 font-medium">Date of birthday</th>
+                                <th class="pb-3 font-medium">Spicialization</th>
+                                <th class="pb-3 font-medium">Department</th>
                             </tr>
                         </thead>
                         <tbody class="text-gray-300">
+                             <?php  foreach($row_doctors as $key): ?>
                             <tr class="border-b border-gray-800 hover:bg-gray-800 hover:bg-opacity-50">
-                                <td class="py-3">Jean Dupont</td>
-                                <td class="py-3">15/02/1985</td>
+                                <td class="py-3"><?php echo $key['first_name'] . ' ' . $key['last_name'] ?></td>
+                                <td class="py-3"><?php echo $key['phone'] ?></td>
+                                <td class="py-3"><?php echo $key['creat_at'] ?></td>
+                                <td class="py-3"><?php echo $key['spicialization'] ?></td>
+                                <td class="py-3"><?php echo $key['department_id'] ?></td>
                                 <td class="py-3"><span
                                         class="px-2 py-1 text-xs rounded-full bg-green-900 text-green-300">Pediatrics</span>
                                 </td>
                                  <td class="py-3 flex gap-5"><a href="#"><i class="fas fa-edit"></i>
-                                    </a><a href="#"><i class="fas fa-trash-can"></i></a></td>
+                                    </a><a href="index.php?action=delete&table=doctors&id=<?php  echo $key['id'] ?>"><i class="fas fa-trash-can"></i></a></td>
                             </tr>
-                            <tr class="border-b border-gray-800 hover:bg-gray-800 hover:bg-opacity-50">
-                                <td class="py-3">Marie Curie</td>
-                                <td class="py-3">22/09/1990</td>
-                                <td class="py-3"><span
-                                        class="px-2 py-1 text-xs rounded-full bg-yellow-900 text-yellow-300">Psychiatry</span>
-                                </td>
-                                 <td class="py-3 flex gap-5"><a href="#"><i class="fas fa-edit"></i>
-                                    </a><a href="#"><i class="fas fa-trash-can"></i></a></td>
-                            </tr>
+                             <?php endforeach; ?>
+                            
                         </tbody>
                     </table>
                 </div>
@@ -266,27 +316,25 @@
                     <button onclick="openModal('department')" class="text-blue-400 hover:text-blue-300"><i
                             class="fas fa-plus-circle"></i></button>
                 </div>
-                <div class="overflow-x-auto">
+                <div class="overflow-y-auto max-h-64">
                     <table class="w-full text-sm">
                         <thead>
                             <tr class="text-left text-gray-400 border-b border-gray-700">
-                                <th class="pb-3 font-medium">Nom</th>
+                                <th class="pb-3 font-medium">Name</th>
                                 <th class="pb-3 font-medium">Location</th>
+                                <th class="pb-3 font-medium">Created At</th>
                             </tr>
                         </thead>
                         <tbody class="text-gray-300">
+                            <?php  foreach($row_departments AS $value):  ?>
                             <tr class="border-b border-gray-800 hover:bg-gray-800 hover:bg-opacity-50">
-                                <td class="py-3">Jean Dupont</td>
-                                <td class="py-3">15/02/1985</td>
+                                <td class="py-3"><?php echo $value['name']  ?></td>
+                                <td class="py-3"><?php echo $value['location']  ?></td>
+                                <td class="py-3"><?php echo $value['creat_at']  ?></td>
                                  <td class="py-3 flex gap-5"><a href="#"><i class="fas fa-edit"></i>
                                     </a><a href="#"><i class="fas fa-trash-can"></i></a></td>
                             </tr>
-                            <tr class="border-b border-gray-800 hover:bg-gray-800 hover:bg-opacity-50">
-                                <td class="py-3">Marie Curie</td>
-                                <td class="py-3">22/09/1990</td>
-                                <td class="py-3 flex gap-5"><a href="#"><i class="fas fa-edit"></i>
-                                    </a><a href="#"><i class="fas fa-trash-can"></i></a></td>
-                            </tr>
+                            <?php  endforeach;  ?>
                         </tbody>
                     </table>
                 </div>
