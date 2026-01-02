@@ -4,10 +4,12 @@ require_once "classes/repositories/AdminRepository.php";
 require_once "classes/repositories/DepartmentRepository.php";
 require_once "classes/repositories/PatientRepository.php";
 require_once "classes/repositories/DoctorRepository.php";
+require_once "classes/repositories/UserRepository.php";
 $pat = new AdminRepository();
 $dep = new DepartmentRepository();
 $delete_patient = new PatientRepository();
 $delete_doctor = new DoctorRepository();
+$delete_User = new UserRepository();
 $row_patient = $pat->getAll('patients','patient');
 $row_doctors = $pat->getAll('doctors','doctor');
 $row_rendezVous = $pat->getRendezVous();
@@ -24,6 +26,8 @@ if(isset($_GET['id']) && $_GET['action'] == "delete" && $_GET['table'] == 'patie
     header('Location: index.php');
     exit;
 }
+
+$delete_User->insertUser();
 
 ?>
 
@@ -348,7 +352,7 @@ if(isset($_GET['id']) && $_GET['action'] == "delete" && $_GET['table'] == 'patie
         <div class="relative p-5 border w-full max-w-md shadow-2xl rounded-2xl bg-gray-800 border-gray-600">
             <div class="mt-3">
                 <h3 id="modalTitle" class="text-lg font-bold text-white mb-4">Titre de la Modale</h3>
-                <form id="modalForm">
+                <form id="modalForm" method="post">
                 </form>
             </div>
         </div>
@@ -417,26 +421,27 @@ if(isset($_GET['id']) && $_GET['action'] == "delete" && $_GET['table'] == 'patie
             if (type === 'patient') {
                 modalForm.innerHTML = `
                     <div class="w-full flex gap-2">
-                        <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Nom</label><input class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" value=""></div>
-                        <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Prenom</label><input class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" value=""></div>
+                        <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Nom</label><input name="first_name" " class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" value=""></div>
+                        <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Prenom</label><input name="last_name" " class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" value=""></div>
                     </div>
                     <div class="w-full flex gap-2">
-                        <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Date de Naissance</label><input class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="date" value="d"></div>
-                        <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Email</label><input class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="email" value=""></div>
+                        <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Date de Naissance</label><input name="date_of_birth" " class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="date" value="d"></div>
+                        <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Email</label><input name="email" " class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="email" value=""></div>
                     </div>
-                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Phone</label><input class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="email" value=""></div>
-                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Gender</label><input class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="email" value=""></div>
-                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Address</label><input class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="email" value=""></div>
-                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Doctor de rendez-vous</label><input class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="email" value=""></div>
+                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Phone</label><input name="phone"" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="phone" value=""></div>
+                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Gender</label><input name="gender"" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="gender" value=""></div>
+                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Role</label><input name="role"" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="role" value=""></div>
+                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Password</label><input name="password_hash"" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="password" value=""></div>
+                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Address</label><input name="adress"" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="address" value=""></div>
                 `;
             } else if (type === 'doctor') {
                 modalForm.innerHTML = `
-                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Nom</label><input class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" value=""></div>
-                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Prenom</label><input class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" value=""></div>
-                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Spécialité</label><input class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" value=""></div>
-                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Email</label><input class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="email" value=""></div>
-                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Phone</label><input class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="email" value=""></div>
-                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Nom de Department</label><input class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="email" value=""></div>
+                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Nom</label><input name="Nom"" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" value=""></div>
+                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Prenom</label><input name="Prenom"" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" value=""></div>
+                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Spécialité</label><input name="Spécialité"" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" value=""></div>
+                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Email</label><input name="Email"" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="email" value=""></div>
+                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Phone</label><input name="Phone"" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="phone" value=""></div>
+                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Nom de Department</label><input name="Department"" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="email" value=""></div>
                 `;
             } else if (type == 'department') {
                 modalForm.innerHTML = `

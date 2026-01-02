@@ -7,4 +7,33 @@ class PatientRepository extends BaseModel{
     public function deletePatient($id){
         return $this->delete($this->table,$id);
     }
+
+  
+    public function insertPatient(){
+        if($_SERVER['REQUEST_METHOD'] == 'POST'){
+            
+    
+            $data_patient = [
+        'gender' => $_POST['gender'] ?? null,
+        'date_of_birth' => $_POST['date_of_birth'] ?? null,
+        'adress' => $_POST['adress'] ?? null,
+    ];
+
+    $columns = "";
+    $placeholders = "";
+
+    foreach ($data_patient as $key => $val) {
+        $columns .= "$key, ";
+        $placeholders .= "?, ";
+    }
+
+    $columns = rtrim($columns, ", ");
+    $placeholders = rtrim($placeholders, ", ");
+
+    return $this->insert($this->table, $columns, $placeholders, array_values($data_patient));
+        }
+    }
 }
+
+// $test =new PatientRepository();
+// $test->insertPatient();
