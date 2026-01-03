@@ -30,4 +30,8 @@ class UserRepository extends BaseModel{
     return $this->insert($this->table, $columns, $placeholders, array_values($data));
         }
     }
+
+
+    
+
 }

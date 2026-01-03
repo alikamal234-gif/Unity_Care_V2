@@ -33,4 +33,12 @@ class DoctorRepository extends BaseModel
             return $this->insert($this->table, $columns, $placeholders, array_values($data_doctor));
         }
     }
+
+    public function getNumber(){
+        $sql = "SELECT  * FROM $this->table";
+
+        $stm = $this->db->query($sql);
+        return $stm->fetchColumn();
+
+    }
 }

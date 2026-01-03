@@ -33,6 +33,15 @@ class PatientRepository extends BaseModel{
     return $this->insert($this->table, $columns, $placeholders, array_values($data_patient));
         }
     }
+
+
+    public function getNumber(){
+        $sql = "SELECT  * FROM $this->table";
+
+        $stm = $this->db->query($sql);
+        return $stm->fetchColumn();
+
+    }
 }
 
 // $test =new PatientRepository();

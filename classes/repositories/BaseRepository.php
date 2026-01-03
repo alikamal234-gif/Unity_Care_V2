@@ -1,6 +1,5 @@
 <?php
 require_once __DIR__ . "../../Database.php";
-// require_once __DIR__ . "../../PatientRepository.php";
 
 class BaseModel
 {
@@ -59,12 +58,45 @@ class BaseModel
             $sql = "INSERT INTO patients (id,$columnsP) Values ($userId,$placeholders)";
             $stm = $this->db->prepare($sql);
             $stm->execute(array_values($data_patient));
+        }else if (in_array('doctor',$data)) {
+            $data_doctor = [
+                'spicialization' => $_POST['spicialization'] ?? null,
+                'department_id' => $_POST['department_id'] ?? null
+            ];
+            $columnsD = "";
+            $placeholders = "";
+
+            foreach ($data_doctor as $key => $val) {
+                $columnsD .= "$key, ";
+                $placeholders .= "?, ";
+            }
+
+            $columnsD = rtrim($columnsD, ", ");
+            $placeholders = rtrim($placeholders, ", ");
+
+            $userId = $this->db->lastInsertId();
+            
+            $sql = "INSERT INTO doctors (id,$columnsD) Values ($userId,$placeholders)";
+            $stm = $this->db->prepare($sql);
+            $stm->execute(array_values($data_doctor));
         }
 
+        
+        
+    }
+    
+    public function insertAll($columns,$values,$data){
 
-
+        $sql = "INSERT INTO departments ($columns) VALUES ($values)";
+        $stm= $this->db->prepare($sql);
+        $stm->execute(array_values($data));
 
     }
+
+
+
+
+
 
 }
 

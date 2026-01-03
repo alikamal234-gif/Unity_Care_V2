@@ -5,11 +5,14 @@ require_once "classes/repositories/DepartmentRepository.php";
 require_once "classes/repositories/PatientRepository.php";
 require_once "classes/repositories/DoctorRepository.php";
 require_once "classes/repositories/UserRepository.php";
+require_once "classes/repositories/AppointmentRepository.php";
+
 $pat = new AdminRepository();
 $dep = new DepartmentRepository();
 $delete_patient = new PatientRepository();
 $delete_doctor = new DoctorRepository();
 $delete_User = new UserRepository();
+$appointment = new AppointmentRepository();
 $row_patient = $pat->getAll('patients','patient');
 $row_doctors = $pat->getAll('doctors','doctor');
 $row_rendezVous = $pat->getRendezVous();
@@ -27,7 +30,13 @@ if(isset($_GET['id']) && $_GET['action'] == "delete" && $_GET['table'] == 'patie
     exit;
 }
 
+
+if($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['department'])){
+    $dep->insertDepartment();
+}else {
+    
 $delete_User->insertUser();
+}
 
 ?>
 
@@ -106,7 +115,7 @@ $delete_User->insertUser();
             <div class="glassmorphism p-6 rounded-2xl flex flex-col justify-between">
                 <div>
                     <p class="text-gray-400 text-sm font-medium">Patients Totals</p>
-                    <p class="text-3xl font-bold text-white mt-2">1,234</p>
+                    <p class="text-3xl font-bold text-white mt-2"><?php echo  $delete_patient->getNumber() ?></p>
                     <p class="text-green-400 text-sm mt-2"><i class="fas fa-arrow-up"></i> 12% depuis le mois dernier
                     </p>
                 </div>
@@ -117,7 +126,7 @@ $delete_User->insertUser();
             <div class="glassmorphism p-6 rounded-2xl flex flex-col justify-between">
                 <div>
                     <p class="text-gray-400 text-sm font-medium">Médecins</p>
-                    <p class="text-3xl font-bold text-white mt-2">45</p>
+                    <p class="text-3xl font-bold text-white mt-2"><?php echo $delete_doctor->getNumber();   ?></p>
                     <p class="text-gray-500 text-sm mt-2"><i class="fas fa-minus"></i> Aucun changement</p>
                 </div>
                 <div class="mt-4 text-right">
@@ -127,7 +136,7 @@ $delete_User->insertUser();
             <div class="glassmorphism p-6 rounded-2xl flex flex-col justify-between">
                 <div>
                     <p class="text-gray-400 text-sm font-medium">Rendez-vous Aujourd'hui</p>
-                    <p class="text-3xl font-bold text-white mt-2">28</p>
+                    <p class="text-3xl font-bold text-white mt-2"><?php  echo $appointment->getNumber()   ?></p>
                     <p class="text-red-400 text-sm mt-2"><i class="fas fa-arrow-down"></i> 5% depuis hier</p>
                 </div>
                 <div class="mt-4 text-right">
@@ -421,39 +430,45 @@ $delete_User->insertUser();
             if (type === 'patient') {
                 modalForm.innerHTML = `
                     <div class="w-full flex gap-2">
-                        <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Nom</label><input name="first_name" " class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" value=""></div>
-                        <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Prenom</label><input name="last_name" " class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" value=""></div>
+                        <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Nom</label><input name="first_name"  class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" value=""></div>
+                        <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Prenom</label><input name="last_name" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" value=""></div>
                     </div>
                     <div class="w-full flex gap-2">
-                        <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Date de Naissance</label><input name="date_of_birth" " class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="date" value="d"></div>
-                        <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Email</label><input name="email" " class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="email" value=""></div>
+                        <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Date de Naissance</label><input name="date_of_birth" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="date" value="d"></div>
+                        <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Email</label><input name="email" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="email" value=""></div>
                     </div>
-                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Phone</label><input name="phone"" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="phone" value=""></div>
-                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Gender</label><input name="gender"" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="gender" value=""></div>
-                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Role</label><input name="role"" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="role" value=""></div>
-                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Password</label><input name="password_hash"" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="password" value=""></div>
-                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Address</label><input name="adress"" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="address" value=""></div>
+                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Phone</label><input name="phone" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="phone" value=""></div>
+                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Gender</label><input name="gender" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="gender" value=""></div>
+                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Role</label><input name="role" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="role" value=""></div>
+                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Password</label><input name="password_hash" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="password" value=""></div>
+                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Address</label><input name="adress" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="address" value=""></div>
                 `;
             } else if (type === 'doctor') {
                 modalForm.innerHTML = `
-                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Nom</label><input name="Nom"" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" value=""></div>
-                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Prenom</label><input name="Prenom"" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" value=""></div>
-                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Spécialité</label><input name="Spécialité"" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" value=""></div>
-                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Email</label><input name="Email"" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="email" value=""></div>
-                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Phone</label><input name="Phone"" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="phone" value=""></div>
-                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Nom de Department</label><input name="Department"" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="email" value=""></div>
+                <div class="w-full flex gap-2">
+                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Nom</label><input name="first_name" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" value=""></div>
+                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Prenom</label><input name="last_name" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" value=""></div>
+                </div>
+                <div class="w-full flex gap-2">
+                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Role</label><input name="role" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="role" value=""></div>
+                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Spécialité</label><input name="spicialization" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" value=""></div>
+                </div> 
+                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Password</label><input name="password_hash" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="password" value=""></div>
+                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Email</label><input name="email" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="email" value=""></div>
+                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Phone</label><input name="Phone" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="phone" value=""></div>
+                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">id de Department</label><input name="department_id"" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="number" value=""></div>
                 `;
             } else if (type == 'department') {
                 modalForm.innerHTML = `
 
-                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Nom de Department</label><input class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="email" value=""></div>
-                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Location</label><input class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="email" value=""></div>
+                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Nom de Department</label><input name="name" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" value=""></div>
+                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Location</label><input name="location" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" value=""></div>
                 `;
             }
             modalForm.innerHTML += `
                 <div class="flex justify-end space-x-3 mt-6">
                     <button type="button" onclick="closeModal()" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-500 transition-colors">Annuler</button>
-                    <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">Enregistrer</button>
+                    <button type="submit" name="${type}" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">Enregistrer</button>
                 </div>
             `;
             modal.classList.remove('hidden');
