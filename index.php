@@ -17,7 +17,7 @@ $row_patient = $pat->getAll('patients','patient');
 $row_doctors = $pat->getAll('doctors','doctor');
 $row_rendezVous = $pat->getRendezVous();
 $row_departments = $dep->getAll();
-
+$weekData = $appointment->getChartAppointments('2025-01-13');
 
 
 if(isset($_GET['id']) && $_GET['action'] == "delete" && $_GET['table'] == 'patients'){
@@ -217,6 +217,7 @@ $delete_User->insertUser();
                     <table class="w-full text-sm ">
                         <thead>
                             <tr class="text-left text-gray-400 border-b border-gray-700">
+                                <th class="pb-3 font-medium">ID</th>
                                 <th class="pb-3 font-medium">Name</th>
                                 <th class="pb-3 font-medium">Phone</th>
                                 <th class="pb-3 font-medium">Created At</th>
@@ -228,6 +229,7 @@ $delete_User->insertUser();
                         <tbody class="text-gray-300 ">
                             <?php  foreach($row_patient as $key): ?>
                             <tr class="border-b border-gray-800 hover:bg-gray-800 hover:bg-opacity-50">
+                                <td class="py-3"><?php echo $key['id'] . ' ' . $key['last_name'] ?></td>
                                 <td class="py-3"><?php echo $key['first_name'] . ' ' . $key['last_name'] ?></td>
                                 <td class="py-3"><?php echo $key['phone'] ?></td>
                                 <td class="py-3"><?php echo $key['creat_at'] ?></td>
@@ -302,17 +304,18 @@ $delete_User->insertUser();
                     <table class="w-full text-sm">
                         <thead>
                             <tr class="text-left text-gray-400 border-b border-gray-700">
+                                <th class="pb-3 font-medium">ID</th>
                                 <th class="pb-3 font-medium">Name</th>
                                 <th class="pb-3 font-medium">Phone</th>
                                 <th class="pb-3 font-medium">Created At</th>
-                                <th class="pb-3 font-medium">Date of birthday</th>
-                                <th class="pb-3 font-medium">Spicialization</th>
+                                <th class="pb-3 font-medium">Specialization</th>
                                 <th class="pb-3 font-medium">Department</th>
                             </tr>
                         </thead>
                         <tbody class="text-gray-300">
                              <?php  foreach($row_doctors as $key): ?>
                             <tr class="border-b border-gray-800 hover:bg-gray-800 hover:bg-opacity-50">
+                                <td class="py-3"><?php echo $key['id'] . ' ' . $key['last_name'] ?></td>
                                 <td class="py-3"><?php echo $key['first_name'] . ' ' . $key['last_name'] ?></td>
                                 <td class="py-3"><?php echo $key['phone'] ?></td>
                                 <td class="py-3"><?php echo $key['creat_at'] ?></td>
@@ -341,6 +344,7 @@ $delete_User->insertUser();
                     <table class="w-full text-sm">
                         <thead>
                             <tr class="text-left text-gray-400 border-b border-gray-700">
+                                <th class="pb-3 font-medium">ID</th>
                                 <th class="pb-3 font-medium">Name</th>
                                 <th class="pb-3 font-medium">Location</th>
                                 <th class="pb-3 font-medium">Created At</th>
@@ -349,6 +353,7 @@ $delete_User->insertUser();
                         <tbody class="text-gray-300">
                             <?php  foreach($row_departments AS $value):  ?>
                             <tr class="border-b border-gray-800 hover:bg-gray-800 hover:bg-opacity-50">
+                                <td class="py-3"><?php echo $value['id']  ?></td>
                                 <td class="py-3"><?php echo $value['name']  ?></td>
                                 <td class="py-3"><?php echo $value['location']  ?></td>
                                 <td class="py-3"><?php echo $value['creat_at']  ?></td>
@@ -385,10 +390,10 @@ $delete_User->insertUser();
         new Chart(appointmentCtx, {
             type: 'line',
             data: {
-                labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
+                labels: <?php echo json_encode(array_keys($weekData)); ?>,
                 datasets: [{
                     label: 'Rendez-vous',
-                    data: [12, 19, 15, 25, 22, 30, 28],
+                    data: <?php echo json_encode(($weekData))  ?>,
                     fill: true,
                     backgroundColor: 'rgba(59, 130, 246, 0.2)',
                     borderColor: 'rgba(59, 130, 246, 1)',
@@ -447,8 +452,17 @@ $delete_User->insertUser();
                         <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Email</label><input name="email" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="email" value=""></div>
                     </div>
                     <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Phone</label><input name="phone" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="phone" value=""></div>
-                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Gender</label><input name="gender" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="gender" value=""></div>
-                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Role</label><input name="role" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="role" value=""></div>
+                    
+                    <div class="mb-4">
+    <label class="block text-gray-300 text-sm font-medium mb-2">Gender</label>
+    <select name="gender"
+        class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+    </select>
+</div>
+
+                    <div class="mb-4"><label class="hidden text-gray-300 text-sm font-medium mb-2">Role</label><input name="role" class="hidden w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="role" value="patient"></div>
                     <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Password</label><input name="password_hash" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="password" value=""></div>
                     <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Address</label><input name="adress" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="address" value=""></div>
                 `;
@@ -459,14 +473,25 @@ $delete_User->insertUser();
                     <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Prenom</label><input name="last_name" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" value=""></div>
                 </div>
                 <div class="w-full flex gap-2">
-                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Role</label><input name="role" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="role" value=""></div>
+                    <div class="mb-4"><label class="hidden text-gray-300 text-sm font-medium mb-2">Role</label><input name="role" class="hidden w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="role" value="doctor"></div>
                     <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Spécialité</label><input name="spicialization" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" value=""></div>
                 </div> 
                     <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Password</label><input name="password_hash" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="password" value=""></div>
                     <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Email</label><input name="email" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="email" value=""></div>
                     <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Phone</label><input name="Phone" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="phone" value=""></div>
-                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">id de Department</label><input name="department_id"" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="number" value=""></div>                    
-                `;
+               
+               <div class="mb-4">
+    <label class="block text-gray-300 text-sm font-medium mb-2">Department</label>
+    <select name="department_id"
+        class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <?php
+            foreach($row_departments AS $value):  
+        ?>
+        <option value="<?php echo $value['id'] ?>"><?php echo $value['name'] ?></option>
+        <?php endforeach; ?>
+    </select>
+</div>
+                    `;
             } else if (type == 'department') {
                 modalForm.innerHTML = `
 
