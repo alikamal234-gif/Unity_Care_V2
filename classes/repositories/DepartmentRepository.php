@@ -21,7 +21,7 @@ class DepartmentRepository extends BaseModel{
         $values = rtrim($values, ", ");
         $columns = rtrim($columns, ", ");
 
-        return $this->insertAll($columns,$values,$data);
+        return $this->insertAll($columns,$values,$data,$this->table);
 
         }
 
@@ -39,9 +39,12 @@ class DepartmentRepository extends BaseModel{
         return $stm->fetchColumn();
 
     }
+    public function getDepartment(){
+        return $this->getAll($this->table);
+    }
 
     public function GetValueDepartment($id){
-        return $this->getAllValue($id,$this->table);
+        return $this->getAllValue($this->table);
     }
     public function updateDepartment($columns,$values,$id){
         return $this->update($columns,$values,$this->table,$id);

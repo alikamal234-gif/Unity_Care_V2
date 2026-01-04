@@ -49,6 +49,9 @@ class PatientRepository extends BaseModel{
     public function updatePatient($columns,$values,$id){
         return $this->update($columns,$values,$this->table,$id);
     }
+
+
+
 }
 
 // $test =new PatientRepository();

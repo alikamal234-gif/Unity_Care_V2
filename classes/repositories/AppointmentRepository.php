@@ -49,6 +49,48 @@ class AppointmentRepository extends BaseModel {
         return $result;
     }
 
+    public function setAppointment($data){
+        $columns = "";
+        $values = "";
+
+        foreach ($data as $key => $value) {
+            $columns .= "$key, ";
+            $values .= "?, ";
+        }
+
+        $values = rtrim($values, ", ");
+        $columns = rtrim($columns, ", ");
+        return $this->insertAll($columns,$values,$data,$this->table);
+    }
+
+    public function getAppointments($id){
+        return $this->getAllWithDoctors($this->table,$id);
+    }
+
+
+    public function GetValueAppointment($id){
+         $sql = "
+        SELECT 
+            p.*,
+            u.first_name,
+            u.last_name
+        FROM appointments p
+        JOIN patients pat ON pat.id = p.patient_id
+        JOIN doctors d ON d.id = p.doctor_id
+        JOIN users u ON u.id = d.id
+        WHERE p.id = :id
+    ";
+
+    $stm = $this->db->prepare($sql);
+    $stm->bindValue(':id', (int)$id, PDO::PARAM_INT);
+    $stm->execute();
+
+    return $stm->fetch(PDO::FETCH_ASSOC);
+
+    }
+    public function updateAppointment($columns,$values,$id){
+        return $this->update($columns,$values,$this->table,$id);
+    }
     
 }
 

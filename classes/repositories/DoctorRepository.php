@@ -48,4 +48,8 @@ class DoctorRepository extends BaseModel
     public function updateDoctor($columns,$values,$id){
         return $this->update($columns,$values,$this->table,$id);
     }
+
+    public function getAllDoctor(){
+        return $this->getUserValue($this->table);
+    }
 }

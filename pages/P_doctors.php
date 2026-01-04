@@ -1,3 +1,16 @@
+<?php
+
+session_start();
+
+
+if($_SESSION['role'] !== 'doctor'){
+    header('Location: login/P_login.php');
+}
+
+
+?>
+
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>

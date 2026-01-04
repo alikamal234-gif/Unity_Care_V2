@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 require_once "classes/repositories/AdminRepository.php";
 require_once "classes/repositories/DepartmentRepository.php";
 require_once "classes/repositories/PatientRepository.php";
@@ -16,9 +16,13 @@ $appointment = new AppointmentRepository();
 $row_patient = $pat->getAll('patients','patient');
 $row_doctors = $pat->getAll('doctors','doctor');
 $row_rendezVous = $pat->getRendezVous();
-$row_departments = $dep->getAll();
+$row_departments = $dep->getDepartment();
 $weekData = $appointment->getChartAppointments('2025-01-13');
 
+
+if($_SESSION['role'] !== 'admin'){
+    header('Location: pages/login/P_login.php');
+}
 
 if(isset($_GET['id']) && $_GET['action'] == "delete" && $_GET['table'] == 'patients'){
     $delete_patient->deletePatient((int) $_GET['id'],);
@@ -142,7 +146,7 @@ $delete_User->insertUser();
             </div>
             <div class="glassmorphism p-6 rounded-2xl flex flex-col justify-between">
                 <div>
-                    <p class="text-gray-400 text-sm font-medium">Rendez-vous Aujourd'hui</p>
+                    <p class="text-gray-400 text-sm font-medium">Rendez-vous</p>
                     <p class="text-3xl font-bold text-white mt-2"><?php  echo $appointment->getNumber()   ?></p>
                     <p class="text-red-400 text-sm mt-2"><i class="fas fa-arrow-down"></i> 5% depuis hier</p>
                 </div>
