@@ -157,7 +157,7 @@ FROM appointments p
 JOIN patients pat ON p.patient_id = pat.id
 JOIN doctors d    ON p.doctor_id = d.id
 JOIN users u      ON u.id = d.id
-WHERE p.id = :id
+WHERE p.patient_id = :id
 ";
         $stm = $this->db->prepare($sql);
         $stm->bindParam(":id", $id);
@@ -165,5 +165,9 @@ WHERE p.id = :id
         $result = $stm->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
+
+
+    
+
 }
 

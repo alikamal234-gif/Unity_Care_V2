@@ -59,7 +59,7 @@ class AppointmentRepository extends BaseModel {
         }
 
         $values = rtrim($values, ", ");
-        $columns = rtrim($columns, ", ");
+        $columns = rtrim( $columns, ", ");
         return $this->insertAll($columns,$values,$data,$this->table);
     }
 
