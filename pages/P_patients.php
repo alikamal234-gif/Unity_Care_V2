@@ -16,6 +16,7 @@ $appointment = new AppointmentRepository();
 $result = $Prescription->getById($_SESSION['id_login']);
 $result_doctor = $Doctor->getAllDoctor();
 
+
 if($_SERVER['REQUEST_METHOD'] == 'POST'){
     $data = [
         "date" => $_POST['date'],
@@ -31,6 +32,13 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
 }
 
 $result_appointment = $appointment->getAppointments($_SESSION['id_login']);
+
+
+if(isset($_GET['id']) && $_GET['action'] == "delete" && $_GET['table'] == 'appointments'){
+    $appointment->deleteAppointment((int) $_GET['id'],);
+    header('Location: P_patients.php');
+    exit;
+}
 
 ?>
 
@@ -269,10 +277,10 @@ $result_appointment = $appointment->getAppointments($_SESSION['id_login']);
                                     class="px-3 py-1 bg-gray-700 border border-gray-600 text-gray-300 rounded-md hover:bg-gray-600 text-sm transition-colors">
                                     <i class="fas fa-edit mr-1"></i>Modifier
                                 </a>
-                                <button
+                                <a   href="P_patients.php?action=delete&table=appointments&id=<?php  echo $value['appointment_id'] ?>"
                                     class="px-3 py-1 bg-red-900/30 text-red-400 rounded-md hover:bg-red-900/50 text-sm transition-colors cancel-appointment border border-red-500/30">
                                     <i class="fas fa-times mr-1"></i>Annuler
-                                </button>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -439,35 +447,12 @@ $result_appointment = $appointment->getAppointments($_SESSION['id_login']);
         </div>
     </div>
 
-    <div id="confirm-modal" class="modal fixed inset-0 bg-gray-900/80 overflow-y-auto h-full w-full hidden z-50">
-        <div
-            class="relative top-20 mx-auto p-5 border border-gray-600 w-96 shadow-2xl rounded-xl bg-gray-800 modal-backdrop">
-            <div class="mt-3 text-center">
-                <div
-                    class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-900/30 mb-4 border border-red-500/30">
-                    <i class="fas fa-exclamation-triangle text-red-400"></i>
-                </div>
-                <h3 class="text-lg font-medium text-gray-100 mb-2">Annuler le rendez-vous</h3>
-                <p class="text-sm text-gray-400 mb-4">Êtes-vous sûr de vouloir annuler ce rendez-vous ?</p>
-                <div class="flex justify-center space-x-3">
-                    <button id="confirm-no"
-                        class="px-4 py-2 bg-gray-700 text-gray-300 rounded-md hover:bg-gray-600 focus:outline-none transition-colors border border-gray-600">
-                        Non
-                    </button>
-                    <button id="confirm-yes"
-                        class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none transition-colors">
-                        Oui, annuler
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+    
 
     <script>
 
 
         const appointmentModal = document.getElementById('add-appointment-modal');
-        const confirmModal = document.getElementById('confirm-modal');
 
         document.getElementById('add-appointment-btn').addEventListener('click', () => {
             appointmentModal.classList.remove('hidden');
@@ -507,17 +492,9 @@ $result_appointment = $appointment->getAppointments($_SESSION['id_login']);
 
         let appointmentToCancel = null;
 
-        document.querySelectorAll('.cancel-appointment').forEach(button => {
-            button.addEventListener('click', (e) => {
-                appointmentToCancel = e.target.closest('.bg-gray-700\\/50, .bg-blue-900\\/30');
-                confirmModal.classList.remove('hidden');
-            });
-        });
+        
 
-        document.getElementById('confirm-no').addEventListener('click', () => {
-            confirmModal.classList.add('hidden');
-            appointmentToCancel = null;
-        });
+       
 
         document.getElementById('confirm-yes').addEventListener('click', () => {
             if (appointmentToCancel) {

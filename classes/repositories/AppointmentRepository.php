@@ -12,6 +12,11 @@ class AppointmentRepository extends BaseModel {
 
     }
 
+    public function deleteAppointment($id)
+    {
+        return $this->delete($this->table, $id);
+    }
+
     public function getChartAppointments(string $startDate): array
     {
         $sql = "
