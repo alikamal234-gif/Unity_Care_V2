@@ -25,11 +25,25 @@ class DepartmentRepository extends BaseModel{
 
         }
 
+        
+
+        public function deleteDepartment($id)
+    {
+        return $this->delete($this->table, $id);
+    }
+
         public function getNumber(){
         $sql = "SELECT  * FROM $this->table";
 
         $stm = $this->db->query($sql);
         return $stm->fetchColumn();
 
+    }
+
+    public function GetValueDepartment($id){
+        return $this->getAllValue($id,$this->table);
+    }
+    public function updateDepartment($columns,$values,$id){
+        return $this->update($columns,$values,$this->table,$id);
     }
 }

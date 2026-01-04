@@ -28,6 +28,10 @@ if(isset($_GET['id']) && $_GET['action'] == "delete" && $_GET['table'] == 'patie
     $delete_doctor->deleteDoctor((int) $_GET['id']);
     header('Location: index.php');
     exit;
+}else if (isset($_GET['id']) && $_GET['action'] == "delete" && $_GET['table'] == 'department'){
+    $dep->deleteDepartment((int) $_GET['id']);
+    header('Location: index.php');
+    exit;
 }
 
 
@@ -36,7 +40,10 @@ if($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['department'])){
 }else {
     
 $delete_User->insertUser();
+
 }
+
+
 
 ?>
 
@@ -230,7 +237,8 @@ $delete_User->insertUser();
                                         class="px-2 py-1 text-xs rounded-full <?php if($key['gender'] == 'female'){ echo 'bg-yellow-900 text-yellow-300'; }else{ echo 'bg-green-900 text-green-300';};   ?> "><?php echo $key['gender'] ?></span>
 
                                 </td>
-                                 <td class="py-3 flex gap-5"><a href="#"><i class="fas fa-edit"></i>
+                                 <td class="py-3 flex gap-5">
+                                    <a href="Edit/patient.php?action=update&table=patients&id=<?php  echo $key['id'] ?>"><i class="fas fa-edit"></i>
                                     </a><a href="index.php?action=delete&table=patients&id=<?php  echo $key['id'] ?>"><i class="fas fa-trash-can"></i></a></td>
                             </tr>
 
@@ -313,7 +321,7 @@ $delete_User->insertUser();
                                 <td class="py-3"><span
                                         class="px-2 py-1 text-xs rounded-full bg-green-900 text-green-300">Pediatrics</span>
                                 </td>
-                                 <td class="py-3 flex gap-5"><a href="#"><i class="fas fa-edit"></i>
+                                 <td class="py-3 flex gap-5"><a href="Edit/doctor.php?action=update&table=doctors&id=<?php  echo $key['id'] ?>"><i class="fas fa-edit"></i>
                                     </a><a href="index.php?action=delete&table=doctors&id=<?php  echo $key['id'] ?>"><i class="fas fa-trash-can"></i></a></td>
                             </tr>
                              <?php endforeach; ?>
@@ -344,8 +352,9 @@ $delete_User->insertUser();
                                 <td class="py-3"><?php echo $value['name']  ?></td>
                                 <td class="py-3"><?php echo $value['location']  ?></td>
                                 <td class="py-3"><?php echo $value['creat_at']  ?></td>
-                                 <td class="py-3 flex gap-5"><a href="#"><i class="fas fa-edit"></i>
-                                    </a><a href="#"><i class="fas fa-trash-can"></i></a></td>
+                                 <td class="py-3 flex gap-5"><a href="Edit/department.php?action=update&table=department&id=<?php  echo $value['id'] ?>"><i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="index.php?action=delete&table=department&id=<?php  echo $value['id'] ?>"><i class="fas fa-trash-can"></i></a></td>
                             </tr>
                             <?php  endforeach;  ?>
                         </tbody>
@@ -430,8 +439,8 @@ $delete_User->insertUser();
             if (type === 'patient') {
                 modalForm.innerHTML = `
                     <div class="w-full flex gap-2">
-                        <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Nom</label><input name="first_name"  class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" value=""></div>
-                        <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Prenom</label><input name="last_name" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" value=""></div>
+                        <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Nom</label><input name="first_name"  class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" value="<?php echo $result['first_name'] ?? '' ?>"></div>
+            <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Prenom</label><input name="last_name" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" value=""></div>
                     </div>
                     <div class="w-full flex gap-2">
                         <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Date de Naissance</label><input name="date_of_birth" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="date" value="d"></div>
@@ -456,7 +465,7 @@ $delete_User->insertUser();
                     <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Password</label><input name="password_hash" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="password" value=""></div>
                     <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Email</label><input name="email" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="email" value=""></div>
                     <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Phone</label><input name="Phone" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="phone" value=""></div>
-                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">id de Department</label><input name="department_id"" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="number" value=""></div>
+                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">id de Department</label><input name="department_id"" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="number" value=""></div>                    
                 `;
             } else if (type == 'department') {
                 modalForm.innerHTML = `

@@ -41,4 +41,11 @@ class DoctorRepository extends BaseModel
         return $stm->fetchColumn();
 
     }
+
+    public function GetValueDoctors($id){
+        return $this->getValue($id,$this->table);
+    }
+    public function updateDoctor($columns,$values,$id){
+        return $this->update($columns,$values,$this->table,$id);
+    }
 }

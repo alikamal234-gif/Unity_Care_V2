@@ -94,9 +94,29 @@ class BaseModel
     }
 
 
+    public function getValue($id,$table){
+        $sql = "SELECT * FROM $table p  JOIN users u ON p.id = u.id WHERE p.id= ?";
+        $stm = $this->db->prepare($sql);
+        $stm->execute([$id]);
+        $result = $stm->fetch();
 
+        return $result;
+    }
 
+    public function getAllValue($id,$table){
+        $sql = "SELECT * FROM $table";
+        $stm = $this->db->prepare($sql);
+        $stm->execute();
+        $result = $stm->fetch();
 
+        return $result;
+    }
+
+    public function update($columns,$values,$table,$id){
+        $sql = "UPDATE $table SET $columns = ? WHERE id = ?";
+        $stm= $this->db->prepare($sql);
+        $stm->execute([$values,$id]);
+    }
 
 }
 

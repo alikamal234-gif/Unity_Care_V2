@@ -16,7 +16,7 @@ class PatientRepository extends BaseModel{
             $data_patient = [
         'gender' => $_POST['gender'] ?? null,
         'date_of_birth' => $_POST['date_of_birth'] ?? null,
-        'adress' => $_POST['adress'] ?? null,
+        'adress' => $_POST['adress'] ?? null
     ];
 
     $columns = "";
@@ -42,7 +42,15 @@ class PatientRepository extends BaseModel{
         return $stm->fetchColumn();
 
     }
+
+    public function GetValuePatients($id){
+        return $this->getValue($id,$this->table);
+    }
+    public function updatePatient($columns,$values,$id){
+        return $this->update($columns,$values,$this->table,$id);
+    }
 }
 
 // $test =new PatientRepository();
-// $test->insertPatient();
+// print_r($test->getValue(12,'hh'));
+

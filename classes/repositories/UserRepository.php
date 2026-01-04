@@ -31,6 +31,9 @@ class UserRepository extends BaseModel{
         }
     }
 
+    public function updateUser($columns,$values,$id){
+        return $this->update($columns,$values,$this->table,$id);
+    }
 
     
 
