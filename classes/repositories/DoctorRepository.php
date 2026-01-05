@@ -84,6 +84,17 @@ class DoctorRepository extends BaseModel
         $result = $stm->fetchAll();
         return $result;
     }
+    public function getNumberPatientBydoctorId($id){
+        $sql = "SELECT COUNT(*) 
+    FROM appointments 
+    WHERE doctor_id = :id
+        ";
+        $stm = $this->db->prepare($sql);
+        $stm->bindParam(":id",$id);
+        $stm->execute();
+        $result = $stm->fetchColumn();
+        return $result;
+    }
 }
 
 

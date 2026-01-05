@@ -11,4 +11,17 @@ class PrescriptionRepository extends BaseModel {
         $result = $stm->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
+
+
+    public function getNumberPrescriptions($id){
+        $sql = "SELECT COUNT(*) FROM $this->table WHERE doctor_id = :id";
+        $stm = $this->db->prepare($sql);
+        $stm->bindParam(":id",$id);
+        $stm->execute();
+        $result = $stm->fetchColumn();
+        return $result;
+
+
+        
+    }
 }

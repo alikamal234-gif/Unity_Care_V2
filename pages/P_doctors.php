@@ -1,5 +1,6 @@
 <?php
 require_once "../classes/repositories/DoctorRepository.php";
+require_once "../classes/repositories/PrescriptionRepository.php";
 
 session_start();
 
@@ -8,7 +9,10 @@ if($_SESSION['role'] !== 'doctor'){
 }
 // getPatientBydoctorId
 $Doctor = new DoctorRepository();
+$Prescription = new PrescriptionRepository();
 $result_patient = $Doctor->getPatientBydoctorId($_SESSION['id_login']);
+$result_number_patient = $Doctor->getNumberPatientBydoctorId($_SESSION['id_login']);
+$result_number_prescription = $Prescription->getNumberPrescriptions($_SESSION['id_login']);
 ?>
 
 <!DOCTYPE html>
@@ -74,7 +78,7 @@ $result_patient = $Doctor->getPatientBydoctorId($_SESSION['id_login']);
                                     <div class="ml-5 w-0 flex-1">
                                         <dl>
                                             <dt class="text-sm font-medium text-gray-400 truncate">Patients</dt>
-                                            <dd class="text-lg font-medium text-white">247</dd>
+                                            <dd class="text-lg font-medium text-white"><?= $result_number_patient ?></dd>
                                         </dl>
                                     </div>
                                 </div>
@@ -97,7 +101,7 @@ $result_patient = $Doctor->getPatientBydoctorId($_SESSION['id_login']);
                                     <div class="ml-5 w-0 flex-1">
                                         <dl>
                                             <dt class="text-sm font-medium text-gray-400 truncate">Rendez-vous</dt>
-                                            <dd class="text-lg font-medium text-white">8</dd>
+                                            <dd class="text-lg font-medium text-white"><?= $result_number_patient ?></dd>
                                         </dl>
                                     </div>
                                 </div>
@@ -120,7 +124,7 @@ $result_patient = $Doctor->getPatientBydoctorId($_SESSION['id_login']);
                                     <div class="ml-5 w-0 flex-1">
                                         <dl>
                                             <dt class="text-sm font-medium text-gray-400 truncate">Prescriptions ce mois</dt>
-                                            <dd class="text-lg font-medium text-white">42</dd>
+                                            <dd class="text-lg font-medium text-white"><?= $result_number_prescription ?></dd>
                                         </dl>
                                     </div>
                                 </div>

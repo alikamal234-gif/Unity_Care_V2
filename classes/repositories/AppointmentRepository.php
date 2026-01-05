@@ -96,6 +96,8 @@ class AppointmentRepository extends BaseModel {
     public function updateAppointment($columns,$values,$id){
         return $this->update($columns,$values,$this->table,$id);
     }
+
+    
     
 }
 
