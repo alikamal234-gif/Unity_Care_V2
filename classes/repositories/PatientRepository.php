@@ -50,7 +50,7 @@ class PatientRepository extends BaseModel{
         return $this->update($columns,$values,$this->table,$id);
     }
 
-
+    
 
 }
 
