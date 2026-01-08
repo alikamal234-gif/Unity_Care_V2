@@ -4,20 +4,26 @@ require_once "User.php";
 
 class Doctor 
 {
+    private int $id;
     private $specialization;
     private $departmentid;
 
     public function __construct(
+        $id,
         $specialization,
         $departmentid
     ) {
+        $this->id = $id;
         $this->specialization = $specialization;
         $this->departmentid = $departmentid;
     }
 
 
 
-    public function getspecialization(){
+    public function getId(){
+        return $this->id;
+    }
+    public function getSpecialization(){
         return $this->specialization;
     }
 

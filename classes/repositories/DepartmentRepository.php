@@ -1,52 +1,43 @@
 <?php
 require_once "BaseRepository.php";
-class DepartmentRepository extends BaseModel{
+class DepartmentRepository extends BaseModel
+{
     protected string $table = 'departments';
 
-    
-    public function insertDepartment(){
-        $data = [
-            "name" => $_POST['name'],
-            "location" => $_POST['location']
-        ];
 
-        $columns = "";
-        $values = "";
+    public function insertDepartment($data)
+    {
+        $sql = "INSERT INTO $this->table (name,location) VALUES (?,?)";
+        $stm = $this->db->prepare($sql);
+        $stm->execute([$data->getName(),$data->getLocation()]);
+    }
 
-        foreach ($data as $key => $value) {
-            $columns .= "$key, ";
-            $values .= "?, ";
-        }
 
-        $values = rtrim($values, ", ");
-        $columns = rtrim($columns, ", ");
 
-        return $this->insertAll($columns,$values,$data,$this->table);
-
-        }
-
-        
-
-        public function deleteDepartment($id)
+    public function deleteDepartment($id)
     {
         return $this->delete($this->table, $id);
     }
 
-        public function getNumber(){
+    public function getNumber()
+    {
         $sql = "SELECT  * FROM $this->table";
 
         $stm = $this->db->query($sql);
         return $stm->fetchColumn();
 
     }
-    public function getDepartment(){
+    public function getDepartment()
+    {
         return $this->getAll($this->table);
     }
 
-    public function GetValueDepartment($id){
+    public function GetValueDepartment($id)
+    {
         return $this->getAllValue($this->table);
     }
-    public function updateDepartment($columns,$values,$id){
-        return $this->update($columns,$values,$this->table,$id);
+    public function updateDepartment($columns, $values, $id)
+    {
+        return $this->update($columns, $values, $this->table, $id);
     }
 }

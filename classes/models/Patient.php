@@ -1,13 +1,21 @@
 <?php
 
-require_once __DIR__ . "../repositories/BaseRepository.php";
+require_once __DIR__ . "/../repositories/BaseRepository.php";
 require_once "User.php";
 
 class Patient{
+    private int $id;
     private $gender;
     private $dateofbirthday;
     private $address;
 
+
+    public function __construct($id,$gender,$dateofbirthday,$address){
+        $this->id = $id;
+        $this->gender = $gender;
+        $this->$dateofbirthday = $dateofbirthday;
+        $this->address = $address;
+    }
     
 
     public function getGender(){
@@ -18,6 +26,9 @@ class Patient{
     }
     public function getAddress(){
         return $this->address;
+    }
+    public function getId(){
+        return $this->id;
     }
 
 

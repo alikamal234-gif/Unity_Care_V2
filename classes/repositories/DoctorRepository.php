@@ -12,26 +12,12 @@ class DoctorRepository extends BaseModel
 
 
 
-    public function insertDoctor()
+    public function insertDoctor($data)
     {
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $data_doctor = [
-                'spicialization' => $_POST['spicialization'] ?? null,
-                'department_id' => $_POST['department_id'] ?? null
-            ];
-            $columns = "";
-            $placeholders = "";
-
-            foreach ($data_doctor as $key => $val) {
-                $columns .= "$key, ";
-                $placeholders .= "?, ";
-            }
-
-            $columns = rtrim($columns, ", ");
-            $placeholders = rtrim($placeholders, ", ");
-
-            return $this->insert($this->table, $columns, $placeholders, array_values($data_doctor));
-        }
+        $sql = "INSERT INTO $this->table (id,spicialization,department_id)  VALUES (?,?,?)";
+        $stm = $this->db->prepare($sql);
+        $stm->execute([$data->getId(),$data->getSpecialization(), $data->getDepartmentId()]);
+    
     }
 
     public function getNumber(){

@@ -6,6 +6,10 @@ require_once "classes/repositories/PatientRepository.php";
 require_once "classes/repositories/DoctorRepository.php";
 require_once "classes/repositories/UserRepository.php";
 require_once "classes/repositories/AppointmentRepository.php";
+require_once "classes/models/User.php";
+require_once "classes/models/Patient.php";
+require_once "classes/models/Doctor.php";
+require_once "classes/models/Departement.php";
 
 $pat = new AdminRepository();
 $dep = new DepartmentRepository();
@@ -39,13 +43,47 @@ if(isset($_GET['id']) && $_GET['action'] == "delete" && $_GET['table'] == 'patie
 }
 
 
-if($_SERVER['REQUEST_METHOD']=='POST' && isset($_POST['department'])){
-    $dep->insertDepartment();
-}else {
-    
-$delete_User->insertUser();
 
+    
+if($_SERVER['REQUEST_METHOD'] == 'POST'){
+    if($_POST['btnAdd'] == 'department'){
+            $modal_department = new Departement($_POST['name'],
+            $_POST['location']);
+            $dep->insertDepartment($modal_department);
+        }else{
+            $model_user = new User(0,
+                        $_POST['first_name'],
+                        $_POST['last_name'],
+                        $_POST['email'],
+                        $_POST['phone'],
+                        $_POST['role'],
+                        $_POST['password_hash']
+                    );
+    
+                $getiduser = $delete_User->insertUser($model_user);
+        if($_POST['btnAdd'] == 'patient'){
+            $modal_patient = new Patient(
+                $getiduser,
+                $_POST['gender'],
+                         $_POST['date_of_birth'],
+                                $_POST['adress']
+                    );
+
+                    $delete_patient->insertPatient($modal_patient);
+        }else if($_POST['btnAdd'] == 'doctor'){
+            $modal_doctor = new Doctor(
+                $getiduser,
+                $_POST['spicialization'],
+                                          $_POST['department_id']
+                                        );
+
+                    $delete_doctor->insertDoctor($modal_doctor);
+        }
+    
+        }
+    
 }
+
 
 
 
@@ -479,6 +517,8 @@ $delete_User->insertUser();
                     <div class="mb-4"><label class="hidden text-gray-300 text-sm font-medium mb-2">Role</label><input name="role" class="hidden w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="role" value="doctor"></div>
                     <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Spécialité</label><input name="spicialization" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" value=""></div>
                 </div> 
+                                    <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Phone</label><input name="phone" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="phone" value=""></div>
+
                     <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Password</label><input name="password_hash" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="password" value=""></div>
                     <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Email</label><input name="email" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="email" value=""></div>
                     <div class="mb-4"><label class="block text-gray-300 text-sm font-medium mb-2">Phone</label><input name="Phone" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="phone" value=""></div>
@@ -505,7 +545,7 @@ $delete_User->insertUser();
             modalForm.innerHTML += `
                 <div class="flex justify-end space-x-3 mt-6">
                     <button type="button" onclick="closeModal()" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-500 transition-colors">Annuler</button>
-                    <button type="submit" name="${type}" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">Enregistrer</button>
+                    <button type="submit" value="${type}" name="btnAdd" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">Enregistrer</button>
                 </div>
             `;
             modal.classList.remove('hidden');

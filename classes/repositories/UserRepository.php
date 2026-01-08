@@ -4,31 +4,11 @@ require_once "BaseRepository.php";
 
 class UserRepository extends BaseModel{
     protected string $table = 'users';
-    public function insertUser(){
-        if($_SERVER['REQUEST_METHOD'] == 'POST'){
-             $data = [
-        'first_name' => $_POST['first_name'] ?? null,
-        'last_name' => $_POST['last_name'] ?? null,
-        'email' => $_POST['email'] ?? null,
-        'phone' => $_POST['phone'] ?? null,
-        'role' => $_POST['role'] ?? null,
-        'password_hash' => $_POST['password_hash'] ?? null,
-    ];
-    
-
-    $columns = "";
-    $placeholders = "";
-
-    foreach ($data as $key => $val) {
-        $columns .= "$key, ";
-        $placeholders .= "?, ";
-    }
-
-    $columns = rtrim($columns, ", ");
-    $placeholders = rtrim($placeholders, ", ");
-
-    return $this->insert($this->table, $columns, $placeholders, array_values($data));
-        }
+    public function insertUser($data){
+        $sql = "INSERT INTO $this->table (id,email,first_name,last_name,phone,password_hash,role) values (?,?,?,?,?,?,?)";
+        $stm = $this->db->prepare($sql);
+        $stm->execute([null,$data->getEmail(),$data->getFirstName(),$data->getLastName(),$data->getPhone(),$data->getPassword(),$data->getRole()]);
+        return $this->db->lastInsertId();
     }
 
     public function updateUser($columns,$values,$id){

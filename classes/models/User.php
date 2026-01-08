@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . "../repositories/BaseRepository.php";
+require_once __DIR__ . "/../repositories/BaseRepository.php";
 class User extends BaseModel
 {
     private $id;
@@ -8,10 +8,9 @@ class User extends BaseModel
     private $email;
     private $phone;
     private $role;
-    private $creat_at;
-    private $updated_at;
+    private $password_hash;
 
-    private string $table;
+
 
     public function __construct(
         $id,
@@ -20,19 +19,15 @@ class User extends BaseModel
         $email,
         $phone,
         $role,
-        $created,
-        $updated,
-        $table
+        $password_hash
     ) {
+        $this->id = $id;
         $this->firstname = $fname;
         $this->lastname = $lname;
         $this->email = $email;
         $this->phone = $phone;
         $this->role = $role;
-        $this->creat_at = $created;
-        $this->updated_at = $updated;
-        $this->table = $table;
-        $this->id = $id;
+        $this->password_hash = $password_hash;
     }
     
 
@@ -62,14 +57,7 @@ class User extends BaseModel
     {
         $this->role = $role;
     }
-    public function setCreatAt($created)
-    {
-        $this->creat_at = $created;
-    }
-    public function setUpdatedAt($updated)
-    {
-        $this->updated_at = $updated;
-    }
+  
 
 
     public function getFirstName()
@@ -92,14 +80,11 @@ class User extends BaseModel
     {
         return $this->role;
     }
-    public function getCreatAt()
+    public function getPassword()
     {
-        return $this->creat_at;
+        return $this->password_hash;
     }
-    public function getUpdatedAt()
-    {
-        return $this->updated_at;
-    }
+
 
 
     
