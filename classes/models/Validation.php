@@ -18,8 +18,6 @@ class ValidationLogin extends BaseModel{
                     header('Location: ../P_patients.php');
                 }else if($_SESSION['role'] == 'doctor'){
                     header('Location: ../P_doctors.php');
-
-
                 }
                 exit;
             }else{

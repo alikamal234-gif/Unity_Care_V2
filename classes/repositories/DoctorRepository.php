@@ -95,6 +95,8 @@ class DoctorRepository extends BaseModel
         $result = $stm->fetchColumn();
         return $result;
     }
+
+    
 }
 
 

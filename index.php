@@ -93,10 +93,8 @@ $delete_User->insertUser();
   scrollbar-width: thin;
   scrollbar-color: #3b82f6 transparent;
 }
-
     </style>
 </head>
-
 <body class="bg-gray-950 text-gray-100">
 
     <header class="glassmorphism sticky top-0 z-50">
@@ -117,6 +115,7 @@ $delete_User->insertUser();
                 </button>
                 <img src="https://intranet.youcode.ma/storage/users/profile/1525-1760996191.png" alt="Admin"
                     class="w-9 h-9 rounded-full">
+                <a href="classes/auth/logout.php" class="bg-red-600 p-2 border-light-200 rounded-2xl">Logout</a>
             </div>
         </div>
     </header>

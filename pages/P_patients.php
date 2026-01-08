@@ -17,7 +17,7 @@ $result = $Prescription->getById($_SESSION['id_login']);
 $result_doctor = $Doctor->getAllDoctor();
 
 
-if($_SERVER['REQUEST_METHOD'] == 'POST'){
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $data = [
         "date" => $_POST['date'],
         "time" => $_POST['time'],
@@ -27,15 +27,26 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         "patient_id" => $_POST['patient_id'],
 
     ];
+
+    $appointment_obj = new Appointment(
+        null,
+        $_POST['date'],
+        $_POST['time'],
+        $_POST['doctor_id'],
+        $_POST['patient_id'],
+        $_POST['reason'],
+        $_POST['status']
+    );
     
+
     $appointment->setAppointment($data);
 }
 
 $result_appointment = $appointment->getAppointments($_SESSION['id_login']);
 
 
-if(isset($_GET['id']) && $_GET['action'] == "delete" && $_GET['table'] == 'appointments'){
-    $appointment->deleteAppointment((int) $_GET['id'],);
+if (isset($_GET['id']) && $_GET['action'] == "delete" && $_GET['table'] == 'appointments') {
+    $appointment->deleteAppointment((int) $_GET['id'], );
     header('Location: P_patients.php');
     exit;
 }
@@ -135,6 +146,7 @@ if(isset($_GET['id']) && $_GET['action'] == "delete" && $_GET['table'] == 'appoi
                         class="p-2 rounded-full text-gray-400 hover:text-gray-200 hover:bg-gray-800 transition-all duration-200">
                         <i class="fas fa-sign-out-alt"></i>
                     </button>
+                    <a href="../classes/auth/logout.php" class="bg-red-600 p-2 border-light-200 rounded-2xl">Logout</a>
                 </div>
             </div>
         </div>
@@ -214,23 +226,24 @@ if(isset($_GET['id']) && $_GET['action'] == "delete" && $_GET['table'] == 'appoi
                         <div
                             class="bg-gray-700/50 border border-gray-600 p-4 rounded-lg hover:bg-gray-700 transition-all duration-200 fade-in flex justify-between items-center">
                             <div>
-                                <p class="font-semibold text-gray-100"><?php echo $values['name'] ?></p>
+                                <p class="font-semibold text-gray-100"><?php echo $values['medication_name'] ?></p>
                                 <p class="text-sm text-gray-400">
-                                    <?php echo "Dosage Instruction : " . $values['dosage_instructions'] ?>
+                                    <?php echo "Dosage Instruction : " . $values['prescription_dosage_instructions'] ?>
                                 </p>
-                                <p class="text-sm text-gray-400"><?php echo "Instruction : " . $values['instructions'] ?>
+                                <p class="text-sm text-gray-400">
+                                    <?php echo "Instruction : " . $values['medication_instructions'] ?>
                                 </p>
                                 <p class="text-xs text-gray-500 mt-1">
-                                    <?php echo "Dr. " . $values['first_name'] . $values['last_name'] . " • " . $values['date'] ?>
+                                    <?php echo "Dr. " . $values['user_first_name'] . $values['user_last_name'] . " • " . $values['prescription_date'] ?>
                                 </p>
                             </div>
                             <button
                                 class="open-prescription px-3 py-1 bg-green-900/30 text-green-400 rounded-md hover:bg-green-900/50 text-sm border border-green-500/30"
-                                data-name="<?= htmlspecialchars($values['name']) ?>"
-                                data-dosage="<?= htmlspecialchars($values['dosage_instructions']) ?>"
-                                data-instructions="<?= htmlspecialchars($values['instructions']) ?>"
-                                data-doctor="<?= htmlspecialchars($values['first_name'] . ' ' . $values['last_name']) ?>"
-                                data-date="<?= htmlspecialchars($values['date']) ?>">
+                                data-name="<?= htmlspecialchars($values['medication_name']) ?>"
+                                data-dosage="<?= htmlspecialchars($values['prescription_dosage_instructions']) ?>"
+                                data-instructions="<?= htmlspecialchars($values['medication_instructions']) ?>"
+                                data-doctor="<?= htmlspecialchars($values['user_first_name'] . ' ' . $values['user_last_name']) ?>"
+                                data-date="<?= htmlspecialchars($values['prescription_date']) ?>">
                                 <i class="fas fa-eye mr-1"></i>Voir
                             </button>
 
@@ -259,44 +272,45 @@ if(isset($_GET['id']) && $_GET['action'] == "delete" && $_GET['table'] == 'appoi
 
                 <div class="space-y-4">
 
-                <?php  foreach($result_appointment as $key => $value): ?>
-                    <div class="border-l-4 border-blue-500 bg-blue-900/30 p-4 rounded-r-lg fade-in">
-                        <div class="flex justify-between items-start">
-                            <div class="flex-1">
-                                <div class="flex items-center mb-2">
-                                    <span
-                                        class="bg-blue-600/30 text-blue-300 text-xs font-medium px-2.5 py-0.5 rounded border border-blue-500/30"><?php echo $value['date'] ?></span>
-                                    <span class="ml-3 text-sm text-gray-300"><?php echo $value['time'] ?></span>
+                    <?php foreach ($result_appointment as $key => $value): ?>
+                        <div class="border-l-4 border-blue-500 bg-blue-900/30 p-4 rounded-r-lg fade-in">
+                            <div class="flex justify-between items-start">
+                                <div class="flex-1">
+                                    <div class="flex items-center mb-2">
+                                        <span
+                                            class="bg-blue-600/30 text-blue-300 text-xs font-medium px-2.5 py-0.5 rounded border border-blue-500/30"><?php echo $value['date'] ?></span>
+                                        <span class="ml-3 text-sm text-gray-300"><?php echo $value['time'] ?></span>
+                                    </div>
+                                    <h4 class="font-semibold text-gray-100 mb-1"><?php echo $value['reason'] ?></h4>
+                                    <p class="text-sm text-gray-400 mb-2">
+                                        <?php echo $value['doctor_first_name'] . " " . $value['doctor_last_name'] ?></p>
+
                                 </div>
-                                <h4 class="font-semibold text-gray-100 mb-1"><?php echo $value['reason'] ?></h4>
-                                <p class="text-sm text-gray-400 mb-2"><?php echo $value['doctor_first_name'] . " " . $value['doctor_last_name'] ?></p>
-                               
-                            </div>
-                            <div class="flex space-x-2 ml-4">
-                                <a href="../Edit/rendezVous.php?action=update&table=appointments&id=<?php  echo $value['appointment_id'] ?>"
-                                    class="px-3 py-1 bg-gray-700 border border-gray-600 text-gray-300 rounded-md hover:bg-gray-600 text-sm transition-colors">
-                                    <i class="fas fa-edit mr-1"></i>Modifier
-                                </a>
-                                <a   href="P_patients.php?action=delete&table=appointments&id=<?php  echo $value['appointment_id'] ?>"
-                                    class="px-3 py-1 bg-red-900/30 text-red-400 rounded-md hover:bg-red-900/50 text-sm transition-colors cancel-appointment border border-red-500/30">
-                                    <i class="fas fa-times mr-1"></i>Annuler
-                                </a>
+                                <div class="flex space-x-2 ml-4">
+                                    <a href="../Edit/rendezVous.php?action=update&table=appointments&id=<?php echo $value['appointment_id'] ?>"
+                                        class="px-3 py-1 bg-gray-700 border border-gray-600 text-gray-300 rounded-md hover:bg-gray-600 text-sm transition-colors">
+                                        <i class="fas fa-edit mr-1"></i>Modifier
+                                    </a>
+                                    <a href="P_patients.php?action=delete&table=appointments&id=<?php echo $value['appointment_id'] ?>"
+                                        class="px-3 py-1 bg-red-900/30 text-red-400 rounded-md hover:bg-red-900/50 text-sm transition-colors cancel-appointment border border-red-500/30">
+                                        <i class="fas fa-times mr-1"></i>Annuler
+                                    </a>
+                                </div>
                             </div>
                         </div>
+                    <?php endforeach; ?>
+
+
+
+                    <div class="text-center py-12 hidden" id="no-appointments">
+                        <i class="fas fa-calendar-times text-gray-600 text-5xl mb-4"></i>
+                        <p class="text-gray-400">Vous n'avez aucun rendez-vous à venir</p>
+                        <button
+                            class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
+                            Prendre rendez-vous
+                        </button>
                     </div>
-                    <?php  endforeach; ?>
-
-                    
-
-                <div class="text-center py-12 hidden" id="no-appointments">
-                    <i class="fas fa-calendar-times text-gray-600 text-5xl mb-4"></i>
-                    <p class="text-gray-400">Vous n'avez aucun rendez-vous à venir</p>
-                    <button
-                        class="mt-4 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
-                        Prendre rendez-vous
-                    </button>
                 </div>
-            </div>
 
 
     </main>
@@ -377,7 +391,7 @@ if(isset($_GET['id']) && $_GET['action'] == "delete" && $_GET['table'] == 'appoi
                         <label class="hidden text-sm font-medium text-gray-300 mb-1">Patient</label>
 
                         <input type="text" name="patient_id"
-                            class="hidden w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-100"
+                            class="block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-100"
                             value="<?php echo $_SESSION['id_login'] ?>">
                     </div>
 
@@ -411,8 +425,9 @@ if(isset($_GET['id']) && $_GET['action'] == "delete" && $_GET['table'] == 'appoi
                         <select name="doctor_id" class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md
                             focus:outline-none focus:ring-2 focus:ring-blue-500
                             focus:border-blue-500 text-gray-100">
-                            <?php foreach($result_doctor AS $value): ?>
-                            <option value="<?php echo $value['id'] ?>"><?php echo $value['first_name'] ." ". $value['last_name']  ?></option>
+                            <?php foreach ($result_doctor as $value): ?>
+                                <option value="<?php echo $value['id'] ?>">
+                                    <?php echo $value['first_name'] . " " . $value['last_name'] ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -447,7 +462,7 @@ if(isset($_GET['id']) && $_GET['action'] == "delete" && $_GET['table'] == 'appoi
         </div>
     </div>
 
-    
+
 
     <script>
 
@@ -492,9 +507,9 @@ if(isset($_GET['id']) && $_GET['action'] == "delete" && $_GET['table'] == 'appoi
 
         let appointmentToCancel = null;
 
-        
 
-       
+
+
 
         document.getElementById('confirm-yes').addEventListener('click', () => {
             if (appointmentToCancel) {

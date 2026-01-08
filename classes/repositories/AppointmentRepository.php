@@ -96,7 +96,16 @@ class AppointmentRepository extends BaseModel {
     public function updateAppointment($columns,$values,$id){
         return $this->update($columns,$values,$this->table,$id);
     }
+    
 
+    public function getAppointmentByDoctorsId($id){
+        $sql = "SELECT * FROM $this->table WHERE doctor_id = :id";
+        $stm = $this->db->prepare($sql);
+        $stm->bindParam(":id",$id);
+        $stm->execute();
+        $result = $stm->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+    }
     
     
 }

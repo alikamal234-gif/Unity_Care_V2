@@ -21,8 +21,7 @@ class Appointment
         $patientid,
         $reason,
         $status,
-        $created,
-        $updatedat
+
     ) {
 
         $this->id = $id;
@@ -32,8 +31,7 @@ class Appointment
         $this->patientid = $patientid;
         $this->reason = $reason;
         $this->status = $status;
-        $this->created = $created;
-        $this->updatedat = $updatedat;
+
 
     }
 
