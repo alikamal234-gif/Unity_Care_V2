@@ -54,11 +54,11 @@ class AppointmentRepository extends BaseModel {
         return $result;
     }
 
-    public function setAppointment($data){
-        $sql = "INSERT INTO $this->table (date,time,doctor_id,patient_id,reason,status) VALUES (?,?,?,?,?,?) ";
-        $stm = $this->db->prepare($sql);
-        $stm->execute([$data->getDate(),$data->getTime(),$data->getDoctorId(),$data->getPatientId(),$data->getReason(),$data->getStatus()]);
-    }
+        public function setAppointment($data){
+            $sql = "INSERT INTO $this->table (date,time,doctor_id,patient_id,reason,status) VALUES (?,?,?,?,?,?) ";
+            $stm = $this->db->prepare($sql);
+            $stm->execute([$data->getDate(),$data->getTime(),$data->getDoctorId(),$data->getPatientId(),$data->getReason(),$data->getStatus()]);
+        }
 
     
 
@@ -116,8 +116,18 @@ WHERE p.patient_id = :id
     return $stm->fetch(PDO::FETCH_ASSOC);
 
     }
-    public function updateAppointment($columns,$values,$id){
-        return $this->update($columns,$values,$this->table,$id);
+    public function updateAppointment($data,$id){
+        $sql = "UPDATE $this->table SET  
+                date = ? , 
+                time= ?,
+                doctor_id = ?,
+                patient_id = ?,
+                reason = ?,
+                stats = ? WHERE 
+                id = ?";
+        $stm = $this->db->prepare($sql);
+        $stm->execute([$data->getDate(), $data->getTime(), $data->getDoctorId(), $data->getPatientId(),$data->getReason(),$data->getStatus(),$id]);
+ 
     }
     
 

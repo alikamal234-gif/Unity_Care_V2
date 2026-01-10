@@ -1,34 +1,38 @@
 <?php
 require_once "../classes/repositories/DoctorRepository.php";
 require_once "../classes/repositories/UserRepository.php";
+require_once "../classes/models/User.php";
+require_once "../classes/models/Doctor.php";
+
 
 $Doctor = new DoctorRepository();
 $user = new UserRepository();
 
- if(isset($_GET['id']) && $_GET['action'] == "update" && $_GET['table'] == 'doctor'){
+ if(isset($_GET['id']) && $_GET['action'] == "update" && $_GET['table'] == 'doctors'){
     $result = $Doctor->GetValueDoctors($_GET['id']);
 }
 
 if($_SERVER['REQUEST_METHOD']=='POST'){
-    $data_user = [
-        'first_name' => $_POST['first_name'] ?? null,
-        'last_name' => $_POST['last_name'] ?? null,
-        'email' => $_POST['email'] ?? null,
-        'phone' => $_POST['phone'] ?? null,
-        'role' => $_POST['role'] ?? null,
-        'password_hash' => $_POST['password_hash'] ?? null,
-    ];
+    
+    $modal_user = new User(
+        $_GET['id'],
+        $_POST['first_name'],
+        $_POST['last_name'],
+        $_POST['email'],
+        $_POST['phone'],
+        $_POST['role'],
+        $_POST['password_hash']
+    );
+    $user->updateUser($modal_user);
 
-    $data_Doctor = [
-        'spicialization' => $_POST['spicialization'] ?? null,
-                'department_id' => $_POST['department_id'] ?? null
-    ];
-    foreach ($data_Doctor as $key => $value) {
-        $Doctor->updateDoctor($key,$value,$_GET['id']);
-    }
-    foreach ($data_user as $key => $value) {
-        $user->updateUser($key,$value,$_GET['id']);
-    }
+   
+
+    $modal_doctor = new Doctor(
+        $_GET['id'],
+        $_POST['spicialization'],
+        $_POST['department_id']
+    );
+    $Doctor->updateDoctor($modal_doctor);
 
     header('Location: ../index.php');
     exit;

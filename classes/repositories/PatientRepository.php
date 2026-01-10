@@ -36,13 +36,15 @@ class PatientRepository extends BaseModel
     {
         return $this->getUserValue($this->table);
     }
-    public function updatePatient($columns, $values, $id)
+    public function updatePatient($data)
     {
-        return $this->update($columns, $values, $this->table, $id);
+        $sql = "UPDATE $this->table SET  gender = ? , date_of_birth = ? , adress = ? WHERE id = ?";
+        $stm = $this->db->prepare($sql);
+        $stm->execute([$data->getGender(), $data->getDateOfBirthday(),$data->getAddress(),$data->getId()]);
     }
 
 
-
+    
 }
 
 // $test =new PatientRepository();

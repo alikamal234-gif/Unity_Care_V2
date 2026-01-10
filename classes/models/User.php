@@ -59,7 +59,9 @@ class User extends BaseModel
     }
   
 
-
+    public function getId(){
+        return $this->id;
+    }
     public function getFirstName()
     {
         return $this->firstname;

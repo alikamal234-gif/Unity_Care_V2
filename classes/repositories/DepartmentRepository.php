@@ -34,10 +34,20 @@ class DepartmentRepository extends BaseModel
 
     public function GetValueDepartment($id)
     {
-        return $this->getAll($this->table);
+        $sql = "SELECT * FROM $this->table where id=?";
+        $stm = $this->db->prepare($sql);
+        $stm->execute([$id]);
+        return $stm->fetch();
     }
-    public function updateDepartment($columns, $values, $id)
+    public function updateDepartment($data,$id)
     {
-        return $this->update($columns, $values, $this->table, $id);
+         $sql = "UPDATE $this->table SET  
+                name = ? , 
+                location= ?
+                 WHERE 
+                id = ?";
+        $stm = $this->db->prepare($sql);
+        $stm->execute([$data->getName(), $data->getLocation(),$id]);
+ 
     }
 }

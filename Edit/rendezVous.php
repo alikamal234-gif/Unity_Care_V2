@@ -18,9 +18,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         "patient_id" => $_POST['patient_id'],
     ];
 
-    foreach ($data as $key => $value) {
-        $appointment->updateAppointment($key, $value, $_GET['id']);
-    }
+    $modal_appointment = new Appointment(
+        $_POST['date'],
+        $_POST['time'],
+        $_POST['doctor_id'],
+        $_POST['patient_id'],
+        $_POST['reason'],
+        $_POST['status'],
+    );
+
+        $appointment->updateAppointment($modal_appointment,$_GET['id']);
+    
 
     header('Location: ../pages/P_patients.php');
     exit;

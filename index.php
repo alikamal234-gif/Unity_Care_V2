@@ -270,7 +270,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
                         <tbody class="text-gray-300 ">
                             <?php  foreach($row_patient as $key): ?>
                             <tr class="border-b border-gray-800 hover:bg-gray-800 hover:bg-opacity-50">
-                                <td class="py-3"><?php echo $key['id'] . ' ' . $key['last_name'] ?></td>
+                                <td class="py-3"><?php echo $key['id']  ?></td>
                                 <td class="py-3"><?php echo $key['first_name'] . ' ' . $key['last_name'] ?></td>
                                 <td class="py-3"><?php echo $key['phone'] ?></td>
                                 <td class="py-3"><?php echo $key['creat_at'] ?></td>

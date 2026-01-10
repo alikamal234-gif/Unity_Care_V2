@@ -31,8 +31,15 @@ class DoctorRepository extends BaseModel
     public function GetValueDoctors($id){
         return $this->getValue($id,$this->table);
     }
-    public function updateDoctor($columns,$values,$id){
-        return $this->update($columns,$values,$this->table,$id);
+    public function updateDoctor($data){
+        $sql = "UPDATE $this->table SET  
+                spicialization = ? , 
+                department_id= ?
+                 WHERE 
+                id = ?";
+        $stm = $this->db->prepare($sql);
+        $stm->execute([$data->getSpecialization(), $data->getDepartmentId(),$data->getId()]);
+   
     }
 
     public function getAllDoctor(){

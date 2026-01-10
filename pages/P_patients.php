@@ -5,6 +5,7 @@ require_once "../classes/repositories/PatientRepository.php";
 require_once "../classes/repositories/PrescriptionRepository.php";
 require_once "../classes/repositories/AppointmentRepository.php";
 require_once "../classes/repositories/DoctorRepository.php";
+require_once "../classes/models/Appointment.php";
 
 
 if ($_SESSION['role'] !== 'patient') {
@@ -18,28 +19,18 @@ $result_doctor = $Doctor->getAllDoctor();
 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $data = [
-        "date" => $_POST['date'],
-        "time" => $_POST['time'],
-        "doctor_id" => $_POST['doctor_id'],
-        "reason" => $_POST['reason'],
-        "status" => $_POST['status'],
-        "patient_id" => $_POST['patient_id'],
+    $modal_appointment = new Appointment(
+        $_POST['date'],
+         $_POST['time'],
+         $_POST['doctor_id'],
+         $_POST['patient_id'],
+         $_POST['reason'],
+         $_POST['status']
+);
 
-    ];
+   
 
-    // $appointment_obj = new Appointment(
-    //     null,
-    //     $_POST['date'],
-    //     $_POST['time'],
-    //     $_POST['doctor_id'],
-    //     $_POST['patient_id'],
-    //     $_POST['reason'],
-    //     $_POST['status']
-    // );
-    
-
-    $appointment->setAppointment($data);
+    $appointment->setAppointment($modal_appointment);
 }
 
 $result_appointment = $appointment->getAppointments($_SESSION['id_login']);
@@ -391,7 +382,7 @@ if (isset($_GET['id']) && $_GET['action'] == "delete" && $_GET['table'] == 'appo
                         <label class="hidden text-sm font-medium text-gray-300 mb-1">Patient</label>
 
                         <input type="text" name="patient_id"
-                            class="block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-100"
+                            class="hidden w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-100"
                             value="<?php echo $_SESSION['id_login'] ?>">
                     </div>
 

@@ -55,12 +55,7 @@ class BaseModel
 
 
 
-    public function update($columns, $values, $table, $id)
-    {
-        $sql = "UPDATE $table SET $columns = ? WHERE id = ?";
-        $stm = $this->db->prepare($sql);
-        $stm->execute([$values, $id]);
-    }
+    
 
     
 
