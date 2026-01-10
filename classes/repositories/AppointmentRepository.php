@@ -55,21 +55,44 @@ class AppointmentRepository extends BaseModel {
     }
 
     public function setAppointment($data){
-        $columns = "";
-        $values = "";
-
-        foreach ($data as $key => $value) {
-            $columns .= "$key, ";
-            $values .= "?, ";
-        }
-
-        $values = rtrim($values, ", ");
-        $columns = rtrim( $columns, ", ");
-        return $this->insertAll($columns,$values,$data,$this->table);
+        $sql = "INSERT INTO $this->table (date,time,doctor_id,patient_id,reason,status) VALUES (?,?,?,?,?,?) ";
+        $stm = $this->db->prepare($sql);
+        $stm->execute([$data->getDate(),$data->getTime(),$data->getDoctorId(),$data->getPatientId(),$data->getReason(),$data->getStatus()]);
     }
 
-    public function getAppointments($id){
-        return $this->getAllWithDoctors($this->table,$id);
+    
+
+    public function getAppointments($id)
+    {
+        $sql = "SELECT 
+    p.id            AS appointment_id,
+    p.date,
+    p.time,
+    p.reason,
+    p.status,
+
+    pat.id          AS patient_id,
+    pat.gender,
+    pat.date_of_birth,
+    pat.adress,
+
+    d.id            AS doctor_id,
+    d.spicialization,
+
+    u.first_name    AS doctor_first_name,
+    u.last_name     AS doctor_last_name
+
+FROM $this->table p
+JOIN patients pat ON p.patient_id = pat.id
+JOIN doctors d    ON p.doctor_id = d.id
+JOIN users u      ON u.id = d.id
+WHERE p.patient_id = :id
+";
+        $stm = $this->db->prepare($sql);
+        $stm->bindParam(":id", $id);
+        $stm->execute();
+        $result = $stm->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
     }
 
 

@@ -32,6 +32,10 @@ class PatientRepository extends BaseModel
     {
         return $this->getValue($id, $this->table);
     }
+    public function GetAllPatients()
+    {
+        return $this->getUserValue($this->table);
+    }
     public function updatePatient($columns, $values, $id)
     {
         return $this->update($columns, $values, $this->table, $id);

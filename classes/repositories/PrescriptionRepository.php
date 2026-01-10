@@ -61,4 +61,12 @@ FROM prescriptions p JOIN medications m ON m.id = p.medication_id JOIN users u O
         $result = $stm->fetchAll(PDO::FETCH_ASSOC);
         return $result;
     }
+
+
+    public function setPrescription(Prescription $data){
+        echo "hhh";
+        $sql = "INSERT INTO $this->table (date,doctor_id,patient_id,medication_id,dosage_instructions) VALUES (?,?,?,?,?)";
+        $stm = $this->db->prepare($sql);
+        $stm->execute([$data->getDate(),$data->getDoctorId(),$data->getPatientId(),$data->getMedicationId(),$data->getDosage()]);
+    }
 }

@@ -28,15 +28,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     ];
 
-    $appointment_obj = new Appointment(
-        null,
-        $_POST['date'],
-        $_POST['time'],
-        $_POST['doctor_id'],
-        $_POST['patient_id'],
-        $_POST['reason'],
-        $_POST['status']
-    );
+    // $appointment_obj = new Appointment(
+    //     null,
+    //     $_POST['date'],
+    //     $_POST['time'],
+    //     $_POST['doctor_id'],
+    //     $_POST['patient_id'],
+    //     $_POST['reason'],
+    //     $_POST['status']
+    // );
     
 
     $appointment->setAppointment($data);

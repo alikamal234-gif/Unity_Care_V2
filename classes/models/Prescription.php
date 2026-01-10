@@ -11,14 +11,12 @@ class Prescription extends User {
     private $dosageinstructioons;
     private $createdat;
     
-    public function __construct($id , $date, $doctorid, $patientid, $medicationid, $dosageinstructioons, $createdat){
-        $this->id = $id;
+    public function __construct( $date, $doctorid, $patientid, $medicationid, $dosageinstructioons){
         $this->date = $date;
         $this->doctorid= $doctorid;
         $this->patientid = $patientid;
         $this->medicationid = $medicationid;
         $this->dosageinstructioons = $dosageinstructioons;
-        $this->createdat = $createdat;
     }
 
     public function getId(){

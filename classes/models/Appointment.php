@@ -9,12 +9,10 @@ class Appointment
     private $patientid;
     private $reason;
     private $status;
-    private $created;
-    private $updatedat;
+
 
 
     public function __construct(
-        $id,
         $date,
         $time,
         $doctorsid,
@@ -24,7 +22,6 @@ class Appointment
 
     ) {
 
-        $this->id = $id;
         $this->date = $date;
         $this->time = $time;
         $this->doctorsid = $doctorsid;
@@ -44,7 +41,7 @@ class Appointment
     public function getTime(){
         return $this->time;
     }
-    public function getDoctorsid(){
+    public function getDoctorId(){
         return $this->doctorsid;
     }
     public function getPatientid(){
@@ -56,12 +53,7 @@ class Appointment
     public function getStatus(){
         return $this->status;
     }
-    public function getCreated(){
-        return $this->created;
-    }
-    public function getUpdatedat(){
-        return $this->updatedat;
-    }
+
 
 
 
@@ -76,10 +68,10 @@ class Appointment
     public function setTime($time){
         $this->time = $time;
     }
-    public function setDoctorsid($doctorsid){
+    public function setDoctorId($doctorsid){
         $this->doctorsid = $doctorsid;
     }
-    public function setPatientid($patientid){
+    public function setPatientId($patientid){
         $this->patientid = $patientid;
     }
     public function setReason($reason){
@@ -88,10 +80,5 @@ class Appointment
     public function setStatus($status){
         $this->status = $status;
     }
-    public function setCreated($created){
-        $this->created = $created;
-    }
-    public function setUpdatedat($updatedat){
-        $this->updatedat = $updatedat;
-    }
+    
 }

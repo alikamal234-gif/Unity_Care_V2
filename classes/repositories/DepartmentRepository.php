@@ -34,7 +34,7 @@ class DepartmentRepository extends BaseModel
 
     public function GetValueDepartment($id)
     {
-        return $this->getAllValue($this->table);
+        return $this->getAll($this->table);
     }
     public function updateDepartment($columns, $values, $id)
     {

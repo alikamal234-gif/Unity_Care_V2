@@ -3,6 +3,9 @@ require_once "../classes/repositories/DoctorRepository.php";
 require_once "../classes/repositories/PatientRepository.php";
 require_once "../classes/repositories/PrescriptionRepository.php";
 require_once "../classes/repositories/AppointmentRepository.php";
+require_once "../classes/repositories/MedicationRepository.php";
+require_once "../classes/models/Appointment.php";
+require_once "../classes/models/Prescription.php";
 
 session_start();
 if ($_SESSION['role'] !== 'doctor') {
@@ -13,12 +16,24 @@ $Doctor = new DoctorRepository();
 $Prescription = new PrescriptionRepository();
 $Appointment = new AppointmentRepository();
 $Patient = new PatientRepository();
+$medication = new MedicationRepository();
 $result_patient = $Doctor->getPatientBydoctorId($_SESSION['id_login']);
 $result_number_patient = $Doctor->getNumberPatientBydoctorId($_SESSION['id_login']);
 $result_number_prescription = $Prescription->getNumberPrescriptions($_SESSION['id_login']);
 $result_appointment = $Appointment->getAppointmentByDoctorsId($_SESSION['id_login']);
 $result_prescription = $Prescription->getByDoctorId($_SESSION['id_login']);
+$result_patient_select = $Patient->GetAllPatients();
+$result_medication_select = $medication->GetAllMedication();
 
+
+if($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['btn'] == "btnAppointment"){
+    $modal_appointment = new Appointment($_POST['date'],$_POST['time'],(int) $_POST['doctor_id'],(int) $_POST['patient_id'],$_POST['reason'],(string) $_POST['status']);
+    $Appointment->setAppointment($modal_appointment);
+}
+if($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['btn'] == "btnPrescription"){
+    $modal_prescription = new Prescription($_POST['date'],$_POST['doctor_id'],$_POST['patient_id'],$_POST['medication_id'],$_POST['dosage_instructions']);
+    $Prescription->setPrescription($modal_prescription);
+}
 ?>
 
 <!DOCTYPE html>
@@ -61,6 +76,7 @@ $result_prescription = $Prescription->getByDoctorId($_SESSION['id_login']);
                     <div class="flex items-center">
                         <span class="ml-2 text-sm font-medium text-gray-300">Dr. Martin</span>
                     </div>
+                    <a href="../classes/auth/logout.php" class="bg-red-600 pl-2 pr-2 border-light-200 rounded-2xl">Logout</a>
                 </div>
             </div>
         </div>
@@ -269,38 +285,37 @@ $result_prescription = $Prescription->getByDoctorId($_SESSION['id_login']);
                                 </button>
                             </div>
                             <?php foreach ($result_appointment as $value): ?>
-                                <div class="space-y-4">
-                                    <div class="bg-gray-800 p-4 border border-gray-700 rounded-lg shadow-sm">
-                                        <div class="flex justify-between">
-                                            <div class="flex items-center">
-                                                <div class="flex-shrink-0 h-10 w-10">
-                                                </div>
-                                                <div class="ml-4">
-                                                    <div class="text-sm font-medium text-white"><?php
-                                                    $result_Patient = $Patient->GetValuePatients($value['patient_id']);
-                                                    echo $result_patient[0]['user_first_name'] . " " . $result_patient[0]['user_last_name'];
-                                                    ?>
-                                                    </div>
-                                                    <div class="text-sm text-gray-400"><?= $value['reason'] ?></div>
-                                                </div>
-                                            </div>
-                                            <div class="flex items-center space-x-4">
-                                                <div class="text-sm text-gray-400">
-                                                    <i class="far fa-calendar mr-1"></i>
-                                                    <?= $value['date'] ?>
-                                                </div>
-                                                <div class="text-sm text-gray-400">
-                                                    <i class="far fa-clock mr-1"></i>
-                                                    <?= $value['time'] ?>
-                                                </div>
-                                                <button class="text-red-600 hover:text-red-900">
-                                                    <i class="fas fa-times-circle"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
+    <div class="space-y-4">
+        <div class="bg-gray-800 p-4 border border-gray-700 rounded-lg shadow-sm">
+            <div class="flex justify-between">
+                <div class="flex items-center">
+                    <div class="ml-4">
+                        <div class="text-sm font-medium text-white">
+                            <?php
+                            $result_patient = $Patient->GetValuePatients($value['patient_id']);
+                            echo $result_patient['first_name'] . ' ' . $result_patient['last_name'];
+                            ?>
+                        </div>
+
+                        <div class="text-sm text-gray-400">
+                            <?= $value['reason']; ?>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <div class="text-sm text-gray-400">
+                        <?= $value['date']; ?>
+                    </div>
+                    <div class="text-sm text-gray-400">
+                        <?= $value['time']; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php endforeach; ?>
+
                         </div>
 
                         <!-- Prescriptions Tab -->
@@ -319,42 +334,32 @@ $result_prescription = $Prescription->getByDoctorId($_SESSION['id_login']);
                                             <th
                                                 class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                                                 Patient</th>
+                                            
                                             <th
                                                 class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                                                Médicament</th>
-                                            <th
-                                                class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
-                                                Dosage</th>
+                                                Medication Name</th>
                                             <th
                                                 class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
                                                 Date</th>
+                                            <th
+                                                class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">
+                                                Dosage Instruction</th>
                                         </tr>
                                     </thead>
                                     <tbody class="bg-gray-800 divide-y divide-gray-700">
                                         <?php foreach ($result_prescription as $value): ?>
                                         <tr>
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                <div class="text-sm font-medium text-white"><?= $result_prescription['user_first_name'] . " " . $result_prescription['user_last_name']  ?></div>
+                                                <div class="text-sm font-medium text-white"><?=  $value['user_first_name'] . " " . $value['user_last_name'] ; ?></div>
                                             </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
-                                                Paracétamol</td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">500mg,
-                                                3x/jour</td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">12/05/2023
+                                           
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400"><?= $value['medication_name']  ?></td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400"><?= $value['prescription_date']  ?>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400"><?= $value['prescription_dosage_instructions']  ?>
                                             </td>
                                         </tr>
                                         <?php endforeach;  ?>
-                                        <tr>
-                                            <td class="px-6 py-4 whitespace-nowrap">
-                                                <div class="text-sm font-medium text-white">Marie Martin</div>
-                                            </td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
-                                                Amoxicilline</td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">1g,
-                                                2x/jour</td>
-                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">05/05/2023
-                                            </td>
-                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -377,27 +382,27 @@ $result_prescription = $Prescription->getByDoctorId($_SESSION['id_login']);
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
-                <form class="space-y-4">
+                <form class="space-y-4" method="post">
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1">Nom complet</label>
-                        <input type="text"
+                        <input type="text" name=""
                             class="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white"
                             placeholder="Nom et prénom">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1">Date de naissance</label>
-                        <input type="date"
+                        <input type="date" name=""
                             class="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1">Téléphone</label>
-                        <input type="tel"
+                        <input type="tel" name=""
                             class="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white"
                             placeholder="06 12 34 56 78">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1">Email</label>
-                        <input type="email"
+                        <input type="email" name=""
                             class="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white"
                             placeholder="email@example.com">
                     </div>
@@ -433,49 +438,49 @@ $result_prescription = $Prescription->getByDoctorId($_SESSION['id_login']);
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
-                <form class="space-y-4">
+                <form class="space-y-4" method="post">
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1">Patient</label>
-                        <select
+                        <select name="patient_id"
                             class="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white">
-                            <option>Sélectionner un patient</option>
-                            <option>Jean Dupont</option>
-                            <option>Marie Martin</option>
-                            <option>Pierre Bernard</option>
+                            <?php foreach($result_patient_select AS $value):  ?>
+                            <option value="<?= $value['id'] ?>"><?=$value['first_name'] . " " . $value['last_name'] ?></option>
+                            <?php endforeach; ?>
                         </select>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1">Date</label>
-                        <input type="date"
+                        <input type="date" name="date"
+                            class="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white">
+                    </div>
+                    <div class="hidden">
+                        <label class="block text-sm font-medium text-gray-300 mb-1">doctor</label>
+                        <input type="number" value="<?= $_SESSION['id_login'] ?>" name="doctor_id"
+                            class="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white">
+                    </div>
+                    <div class="hidden">
+                        <label class="block text-sm font-medium text-gray-300 mb-1">status</label>
+                        <input type="text" value="scheduled" name="status"
                             class="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1">Heure</label>
-                        <input type="time"
+                        <input type="time" name="time"
                             class="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white">
                     </div>
+                   
                     <div>
-                        <label class="block text-sm font-medium text-gray-300 mb-1">Type de consultation</label>
-                        <select
-                            class="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white">
-                            <option>Consultation générale</option>
-                            <option>Suivi traitement</option>
-                            <option>Consultation spécialisée</option>
-                            <option>Urgence</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-300 mb-1">Notes</label>
-                        <textarea
+                        <label class="block text-sm font-medium text-gray-300 mb-1">Reason</label>
+                        <textarea name="reason"
                             class="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white"
-                            rows="3" placeholder="Notes supplémentaires"></textarea>
+                            rows="3" placeholder="Notes supplémentaires"></textarea> 
                     </div>
                     <div class="flex justify-end space-x-3 pt-4">
                         <button type="button" id="cancel-appointment-modal"
                             class="px-4 py-2 bg-gray-700 text-gray-300 rounded-md hover:bg-gray-600 focus:outline-none">
                             Annuler
                         </button>
-                        <button type="button"
+                        <button type="submit" value="btnAppointment" name="btn"
                             class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none">
                             Créer
                         </button>
@@ -484,7 +489,6 @@ $result_prescription = $Prescription->getByDoctorId($_SESSION['id_login']);
             </div>
         </div>
     </div>
-
     <!-- Modal for Adding Prescription -->
     <div id="add-prescription-modal"
         class="modal fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden">
@@ -496,47 +500,50 @@ $result_prescription = $Prescription->getByDoctorId($_SESSION['id_login']);
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
-                <form class="space-y-4">
+                <form class="space-y-4" method="post">
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1">Patient</label>
-                        <select
+                        <select name="patient_id"
                             class="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white">
-                            <option>Sélectionner un patient</option>
-                            <option>Jean Dupont</option>
-                            <option>Marie Martin</option>
-                            <option>Pierre Bernard</option>
+                            <?php foreach($result_patient_select AS $value):  ?>
+                            <option value="<?= $value['id'] ?>"><?=$value['first_name'] . " " . $value['last_name'] ?></option>
+                            <?php endforeach; ?>
                         </select>
                     </div>
+                    
                     <div>
-                        <label class="block text-sm font-medium text-gray-300 mb-1">Médicament</label>
-                        <input type="text"
-                            class="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white"
+                        <label class="hidden text-sm font-medium text-gray-300 mb-1">Doctor</label>
+                        <input type="text" name="doctor_id" value="<?= $_SESSION['id_login'] ?>" name="doctor_id"
+                            class="hidden w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white"
                             placeholder="Nom du médicament">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1">Dosage</label>
-                        <input type="text"
+                        <input type="text" name="dosage_instructions" 
                             class="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white"
                             placeholder="Ex: 500mg, 3x/jour">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-300 mb-1">Durée</label>
-                        <input type="text"
+                        <label class="block text-sm font-medium text-gray-300 mb-1">Date</label>
+                        <input type="date" name="date"
                             class="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white"
-                            placeholder="Ex: 7 jours">
+                            >
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-300 mb-1">Instructions</label>
-                        <textarea
-                            class="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white"
-                            rows="3" placeholder="Instructions spéciales"></textarea>
+                        <label class="block text-sm font-medium text-gray-300 mb-1">Name medication</label>
+                        <select name="medication_id"
+                            class="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white">
+                            <?php foreach($result_medication_select AS $value):  ?>
+                            <option value="<?= $value['id'] ?>"><?=$value['name']  ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
                     <div class="flex justify-end space-x-3 pt-4">
                         <button type="button" id="cancel-prescription-modal"
                             class="px-4 py-2 bg-gray-700 text-gray-300 rounded-md hover:bg-gray-600 focus:outline-none">
                             Annuler
                         </button>
-                        <button type="button"
+                        <button type="submit" name="btn" value="btnPrescription"
                             class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none">
                             Créer
                         </button>
