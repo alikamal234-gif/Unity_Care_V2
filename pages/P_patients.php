@@ -374,14 +374,14 @@ if (isset($_GET['id']) && $_GET['action'] == "delete" && $_GET['table'] == 'appo
                     <div>
                         <label class="hidden text-sm font-medium text-gray-300 mb-1">Status</label>
 
-                        <input type="text" name="status"
+                        <input required type="text" name="status"
                             class="hidden w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-100"
                             value="scheduled">
                     </div>
                     <div>
                         <label class="hidden text-sm font-medium text-gray-300 mb-1">Patient</label>
 
-                        <input type="text" name="patient_id"
+                        <input required type="text" name="patient_id"
                             class="hidden w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-100"
                             value="<?php echo $_SESSION['id_login'] ?>">
                     </div>
@@ -389,7 +389,7 @@ if (isset($_GET['id']) && $_GET['action'] == "delete" && $_GET['table'] == 'appo
                     <div>
 
                         <label class="block text-sm font-medium text-gray-300 mb-1">Date</label>
-                        <input type="date" name="date"
+                        <input required type="date" name="date"
                             class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-gray-100"
                             min="">
                     </div>

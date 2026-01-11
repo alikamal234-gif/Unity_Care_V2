@@ -19,9 +19,7 @@ class Prescription extends User {
         $this->dosageinstructioons = $dosageinstructioons;
     }
 
-    public function getId(){
-        return $this->id;
-    }
+    
     public function getDate(){
         return $this->date;
     }

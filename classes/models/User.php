@@ -59,30 +59,30 @@ class User extends BaseModel
     }
   
 
-    public function getId(){
+    public function getId():int{
         return $this->id;
     }
-    public function getFirstName()
+    public function getFirstName():string
     {
         return $this->firstname;
     }
-    public function getLastName()
+    public function getLastName():string
     {
         return $this->lastname;
     }
-    public function getEmail()
+    public function getEmail():string
     {
         return $this->email;
     }
-    public function getPhone()
+    public function getPhone():string
     {
         return $this->phone;
     }
-    public function getRole()
+    public function getRole():string
     {
         return $this->role;
     }
-    public function getPassword()
+    public function getPassword():string
     {
         return $this->password_hash;
     }

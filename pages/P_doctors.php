@@ -385,24 +385,24 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['btn'] == "btnPrescription"){
                 <form class="space-y-4" method="post">
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1">Nom complet</label>
-                        <input type="text" name=""
+                        <input  required type="text" name=""
                             class="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white"
                             placeholder="Nom et prénom">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1">Date de naissance</label>
-                        <input type="date" name=""
+                        <input required  type="date" name=""
                             class="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1">Téléphone</label>
-                        <input type="tel" name=""
+                        <input required  type="tel" name=""
                             class="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white"
                             placeholder="06 12 34 56 78">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1">Email</label>
-                        <input type="email" name=""
+                        <input required  type="email" name=""
                             class="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white"
                             placeholder="email@example.com">
                     </div>
@@ -450,22 +450,22 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['btn'] == "btnPrescription"){
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1">Date</label>
-                        <input type="date" name="date"
+                        <input required  type="date" name="date"
                             class="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white">
                     </div>
                     <div class="hidden">
                         <label class="block text-sm font-medium text-gray-300 mb-1">doctor</label>
-                        <input type="number" value="<?= $_SESSION['id_login'] ?>" name="doctor_id"
+                        <input required  type="number" value="<?= $_SESSION['id_login'] ?>" name="doctor_id"
                             class="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white">
                     </div>
                     <div class="hidden">
                         <label class="block text-sm font-medium text-gray-300 mb-1">status</label>
-                        <input type="text" value="scheduled" name="status"
+                        <input required  type="text" value="scheduled" name="status"
                             class="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1">Heure</label>
-                        <input type="time" name="time"
+                        <input required  type="time" name="time"
                             class="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white">
                     </div>
                    
@@ -513,19 +513,19 @@ if($_SERVER['REQUEST_METHOD'] == 'POST' && $_POST['btn'] == "btnPrescription"){
                     
                     <div>
                         <label class="hidden text-sm font-medium text-gray-300 mb-1">Doctor</label>
-                        <input type="text" name="doctor_id" value="<?= $_SESSION['id_login'] ?>" name="doctor_id"
+                        <input required  type="text" name="doctor_id" value="<?= $_SESSION['id_login'] ?>" name="doctor_id"
                             class="hidden w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white"
                             placeholder="Nom du médicament">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1">Dosage</label>
-                        <input type="text" name="dosage_instructions" 
+                        <input required  type="text" name="dosage_instructions" 
                             class="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white"
                             placeholder="Ex: 500mg, 3x/jour">
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-1">Date</label>
-                        <input type="date" name="date"
+                        <input required  type="date" name="date"
                             class="w-full px-3 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white"
                             >
                     </div>

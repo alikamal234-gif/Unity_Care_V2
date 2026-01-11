@@ -2,13 +2,13 @@
 
 class Appointment
 {
-    private $id;
-    private $date;
-    private $time;
-    private $doctorsid;
-    private $patientid;
-    private $reason;
-    private $status;
+    private int $id;
+    private string $date;
+    private string $time;
+    private int $doctorsid;
+    private int $patientid;
+    private string $reason;
+    private string $status;
 
 
 
@@ -32,25 +32,25 @@ class Appointment
 
     }
 
-    public function getId(){
+    public function getId():int{
         return $this->id;
     }
-    public function getDate(){
+    public function getDate(): string{
         return $this->date;
     }
-    public function getTime(){
+    public function getTime(): string{
         return $this->time;
     }
-    public function getDoctorId(){
+    public function getDoctorId(): int{
         return $this->doctorsid;
     }
-    public function getPatientid(){
+    public function getPatientid(): int{
         return $this->patientid;
     }
-    public function getReason(){
+    public function getReason(): string{
         return $this->reason;
     }
-    public function getStatus(){
+    public function getStatus(): string{
         return $this->status;
     }
 
